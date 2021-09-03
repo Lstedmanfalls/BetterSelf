@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Registration</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'login_style.css' %}">
+</head>
+<body>
+    <div id="container">
+        <header>
+            <h1>Please register or login</h1>
+        </header>
+        <div id ="messages">
+            {% if messages %}
+            {% for message in messages %}    
+            <p class="messages">    
+            {{ message }}   
+            </p>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div id="wrapper">
+            <div id="registration">
+                <h2>Register</h2>
+                <form action="/admin/register" method="POST">
+                {% csrf_token %}
+                    <label for="first_name">First Name</label>
+                    <input name="first_name" type="text">
+                    <label for="last_name">Last Name</label>
+                    <input name="last_name" type="text">
+                    <label for="email">Email</label>
+                    <input name="email" type="text">
+                    <label for="password">Password</label>
+                    <input name="password" type="password">
+                    <label for="password_confirm">Confirm Password</label>
+                    <input name="password_confirm" type="password">
+                    <button type="submit">Register</button>
+                </form>
+            </div>
+            <div id="login">
+                <h2>Login</h2>
+                <form action="/admin/login" method="POST">
+                {% csrf_token %}
+                    <label for="email">Email</label>
+                    <input name="email" type="email">
+                    <label for="password">Password</label>
+                    <input name="password" type="password">
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
