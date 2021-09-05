@@ -41,5 +41,6 @@ class User(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     objects = UserManager()
     # quote_uploader
+    # quote_liker
     def __repr__(self):
         return f"Object_Name: {self.id}, {self.first_name}, {self.last_name}, {self.email}, {self.password}"

@@ -40,3 +40,12 @@ def create_quote(request): #POST REQUEST
         this_quote.user_who_liked.add(this_user)        
         messages.success(request, "Quote added")
     return redirect("/quotes")
+
+def like(request, quote_id): #POST REQUEST
+    this_user = User.objects.get(id = request.session["user_id"])
+    this_quote = Quote.objects.get(id = quote_id)
+    if request.method != "POST":
+        return redirect("/quotes")
+    if request.method == "POST":
+        this_user.quote_liker.add(this_quote)
+        return redirect("/quotes")

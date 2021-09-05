@@ -33,9 +33,19 @@
             <p>Added by:</p>
             <p>{{quote.user_who_uploaded.first_name}}</p>
             <p>Number of Likes:</p>
-            {% for user in quote.user_who_liked.all %}
-            <p>{{user.quote_liker.count}}</p>
-            {% endfor %}
+                {{quote.user_who_liked.count}}
+            </p>
+            {% if this_user in quote.user_who_liked.all %}
+            <form action="quotes/{{quote.id}}/unlike" method="POST">
+            {% csrf_token %}
+                <button type="submit">Unlike</button>
+            </form>
+            {% else %}
+            <form action="quotes/{{quote.id}}/like" method="POST">
+            {% csrf_token %}
+                <button type="submit">Like</button>
+            </form>
+            {% endif %}
             {% endfor %}
         </div>    
         <div id="add_quote">
