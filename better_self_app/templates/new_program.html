@@ -19,7 +19,7 @@
             <a href="/my_account">My Account</a>
             <a href="/admin/logout">Logout</a>
         </nav>
-        <h1>Quotes Wall</h1>
+        <h1>Start a New Program</h1>
         <div id ="messages">
             {% if messages %}
             {% for message in messages %}    
@@ -28,37 +28,21 @@
             </p>
             {% endfor %}
             {% endif %}
-        </div>
-        <div id="quotes">
-            {% for quote in all_the_quotes %}
-            <p>{{quote.quote}}</p>
-            <p>{{quote.author}}</p>
-            <p>Added by:</p>
-            <p>{{quote.user_who_uploaded.first_name}}</p>
-            <p>Number of Likes:</p>
-                {{quote.user_who_liked.count}}
-            </p>
-            {% if this_user in quote.user_who_liked.all %}
-            <form action="quotes/{{quote.id}}/unlike" method="POST">
+        </div> 
+        <div id="add_program">
+            <form action="/program/create_program" method="POST">
             {% csrf_token %}
-                <button type="submit">Unlike</button>
-            </form>
-            {% else %}
-            <form action="quotes/{{quote.id}}/like" method="POST">
-            {% csrf_token %}
-                <button type="submit">Like</button>
-            </form>
-            {% endif %}
-            {% endfor %}
-        </div>    
-        <div id="add_quote">
-            <h2>Add a Quote</h2>
-            <form action="/quotes/create_quote" method="POST">
-            {% csrf_token %}
-                <label for="quote">Quote</label>
-                <input name="quote" type="text">
-                <label for="author">Quote Author</label>
-                <input name="author" type="text">
+                <label for="behavior">Behavior</label>
+                <input name="behavior" type="text">
+                <label for="measurement">Unit of Measurement</label>
+                <input name="measurement" type="text">
+                <label for="direction">Increase or Decrease Behavior?</label>
+                <select name="direction">
+                    <option value="1">Increase</option>
+                    <option value="0">Decrease</option>
+                </select>
+                <label for="reason">Reason for Wanting Change</label>
+                <textarea name="reason"></textarea>
                 <button type="submit">Submit</button>
             </form>
         </div>

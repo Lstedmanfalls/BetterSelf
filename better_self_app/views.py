@@ -2,7 +2,7 @@ from django.http import request
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib import messages
 from login_registration_app.models import User
-from .models import Quote
+from .models import Quote, Program
 
 
 def landing_page(request): #GET REQUEST
@@ -49,3 +49,48 @@ def like(request, quote_id): #POST REQUEST
     if request.method == "POST":
         this_user.quote_liker.add(this_quote)
         return redirect("/quotes")
+
+def unlike(request, quote_id): #POST REQUEST
+    this_user = User.objects.get(id = request.session["user_id"])
+    this_quote = Quote.objects.get(id = quote_id)
+    if request.method != "POST":
+        return redirect("/quotes")
+    if request.method == "POST":
+        this_user.quote_liker.remove(this_quote)
+    return redirect("/quotes")
+
+def new_program(request): #GET REQUEST
+    if "user_id" not in request.session:
+        messages.error(request, "You must be logged in to view this site")
+        return redirect ("/admin")
+    else:
+        context = {
+        "this_user": User.objects.get(id=request.session["user_id"]),
+    }
+    return render(request, "new_program.html", context)
+
+def create_program(request): #POST REQUEST
+    this_user = User.objects.get(id=request.session["user_id"])
+    errors = Program.objects.create_program_validator(request.POST)
+    if len(errors) > 0:
+        for key, value in errors.items():
+            messages.error(request, value)
+        return redirect("/program")
+    elif request.method != "POST":
+        return redirect("/program")
+    elif request.method == "POST":
+        create = Program.objects.create(behavior = request.POST["behavior"], measurement = request.POST["measurement"], direction = request.POST["direction"], reason = request.POST["reason"], user_program = this_user)
+        program_id = create.id
+    return redirect(f"/program/{program_id}")
+
+def view_program(request, program_id): #GET REQUEST
+    this_program = Program.objects.get(id = program_id)
+    if this_program.direction == 0:
+        change_direction = "Decrease"
+    else:
+        change_direction = "Increase"
+    context = {
+    "this_program": this_program,
+    "change_direction": change_direction
+    }
+    return render(request, "view_program.html", context)

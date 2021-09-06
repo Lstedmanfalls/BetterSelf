@@ -13,7 +13,18 @@ class QuoteManager(models.Manager):
             errors['duplicate'] = "That quote already exists"
         return errors
 
-    # def update_validator(self, postData):
+class ProgramManager(models.Manager):
+    def create_program_validator(self, postData):
+        errors = {}
+        if len(postData['behavior']) < 3:
+            errors['behavior'] = "Behavior should be at least 3 characters"
+        if len(postData['measurement']) < 2:
+            errors['measurement'] = "Unit of measurement should be at least 2 characters"
+        if len(postData['reason']) < 10:
+            errors['reason'] = "Reason should be at least 10 characters"
+        return errors
+
+    # def update_quote_validator(self, postData):
     #     today = date.today()
     #     existing_objects = Class_Name.objects.filter(label = postData['label'])
     #     errors = {}
@@ -33,8 +44,13 @@ class Quote(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = QuoteManager()
-    def __repr__(self):
-        quote_uploader = ""
-        for i in self.user_who_uploaded():
-            quote_uploader += i.first_name + ","
-        return f"Quotes: id = {self.id}, quote = {self.quote}, author = {self.author}, uploaded by = {quote_uploader}"
+
+class Program(models.Model):
+    behavior = models.CharField(max_length=255)
+    measurement = models.CharField(max_length=255)
+    direction = models.IntegerField()
+    reason = models.TextField()
+    user_program = models.ForeignKey(User, related_name="program_user", on_delete = models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = ProgramManager()

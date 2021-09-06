@@ -10,12 +10,12 @@ urlpatterns = [
     path("quotes", views.quotes_wall), #GET request to display quotes wall
     path('quotes/create_quote', views.create_quote), #POST request to create quote object
     path('quotes/<int:quote_id>/like', views.like), #POST request to create like object
-    # path('quotes/unlike', views.unlike), #POST request to delete like object
+    path('quotes/<int:quote_id>/unlike', views.unlike), #POST request to delete like object
     # #Start Program Page
-    # path('program', views.add_program), #GET request to display program creation page
-    # path('program/create_program', views.create_program), #POST request to create program
+    path('program', views.new_program), #GET request to display program creation page
+    path('program/create_program', views.create_program), #POST request to create program
     # #Specific Program Page
-    # path('program/<int:program_id>', views.view_program), #GET request to display a specific program's info
+    path('program/<int:program_id>', views.view_program), #GET request to display a specific program's info
     # path('program/<int:program_id>/add_baseline', views.add_baseline), #POST request to create baseline entry
     # path('program/<int:program_id>/add_intervention', views.add_intervention), #POST request to create intervention entry
     # path('program/<int:baseline_id>/edit_baseline', views.edit_baseline), #GET request to display form to edit a specific baseline entry
