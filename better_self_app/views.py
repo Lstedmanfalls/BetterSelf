@@ -2,8 +2,9 @@ from django.http import request
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib import messages
 from login_registration_app.models import User
-from .models import Quote, Program
-
+from .models import Quote, Program, Baseline
+from django.db.models import Avg, base
+from datetime import date
 
 def landing_page(request): #GET REQUEST
     return render(request, "landing_page.html")
@@ -85,12 +86,34 @@ def create_program(request): #POST REQUEST
 
 def view_program(request, program_id): #GET REQUEST
     this_program = Program.objects.get(id = program_id)
+    baseline_avg = int(this_program.baseline_program.aggregate(Avg('total'))["total__avg"])
     if this_program.direction == 0:
-        change_direction = "Decrease"
+        change_direction = "decrease"
+        goal_statement = "No more than"
+        goal = int(baseline_avg - (baseline_avg * .1))
     else:
-        change_direction = "Increase"
+        change_direction = "increase"
+        goal_statement = "At least"
+        goal = int(baseline_avg + (baseline_avg * .1))
     context = {
     "this_program": this_program,
-    "change_direction": change_direction
+    "change_direction": change_direction,
+    "goal_statement" : goal_statement,
+    "baseline_avg": baseline_avg,
+    "goal": goal
     }
     return render(request, "view_program.html", context)
+
+def create_baseline(request, program_id): #POST REQUEST
+    this_user = User.objects.get(id=request.session["user_id"])
+    this_program = Program.objects.get(id = program_id)
+    errors = Baseline.objects.create_baseline_validator(request.POST)
+    if len(errors) > 0:
+        for key, value in errors.items():
+            messages.error(request, value)
+        return redirect(f"/program/{program_id}")
+    elif request.method != "POST":
+        return redirect(f"/program/{program_id}")
+    elif request.method == "POST":
+        Baseline.objects.create(date = request.POST["date"], total = request.POST["total"], notes = request.POST["notes"], user_baseline = this_user, program_baseline = this_program)
+    return redirect(f"/program/{program_id}")

@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'mathfilters',
     'login_registration_app',
     'better_self_app',
     'django.contrib.admin',

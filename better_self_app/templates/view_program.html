@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Title</title>
     {% load static %}
+    {% load mathfilters %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
@@ -19,20 +20,78 @@
             <a href="/my_account">My Account</a>
             <a href="/admin/logout">Logout</a>
         </nav>
-        <h1>{{this_program.behavior}}</h1>
-        <div id ="messages">
-            {% if messages %}
-            {% for message in messages %}    
-            <p class="messages">    
-            {{ message }}   
-            </p>
-            {% endfor %}
-            {% endif %}
-        </div>
-        <div id ="program_info">
-            <p>Unit of Measurement: {{this_program.measurement}}</p>
-            <p>Direction of Desired Change: {{change_direction}}</p>
-            <p>Reason for Wanting Change: {{this_program.reason}}</p>
+        <div id ="program">
+            <h1>{{this_program.behavior}}</h1>
+            <p>I am going to {{change_direction}} my number of {{this_program.measurement}} each day</p>
+            <h2>My Reason</h2>
+            <div id="reason">
+                <p>{{this_program.reason}}</p>
+            </div>
+            <h2>Baseline Average</h2>
+            <div id="baseline_avg">
+                <p>{{baseline_avg}} {{this_program.measurement}} each day</p>
+            </div>
+            <h2>Current Goal</h2>
+            <div id="goal">
+                <p>{{goal_statement}} {{goal}} {{this_program.measurement}} each day</p>
+                <form action="/program/{{this_program.id}}/new_goal" method="POST">
+                {% csrf_token %}
+                    <button type="submit">Generate New Goal</button>
+                </form>
+            </div>
+            <h2>Add Baseline Entry</h2>
+            <div id="add_baseline">
+                <form action="/program/{{this_program.id}}/create_baseline" method="POST">
+                {% csrf_token %}
+                    <label for="date">Date</label>
+                    <input name="date" type="date" value = "2021-09-01">
+                    <label for="total">Day Total</label>
+                    <input name="total" type="number" min="0">
+                    <label for="notes">Notes</label>
+                    <textarea name="notes"></textarea>
+                    <button type="submit">Submit</button>
+                </form>
+                <div id ="messages">
+                    {% if messages %}
+                    {% for message in messages %}    
+                    <p class="messages">    
+                    {{ message }}   
+                    </p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            <div id="table">
+                <h1>Program Progress</h1>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Phase</th>
+                            <th>Date</th>
+                            <th>{{this_program.measurement}}</th>
+                            <th>Change From Goal</th>
+                            <th>Daily Goal Met?</th>
+                            <th>Notes</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in this_program.baseline_program.all %}
+                        <tr>
+                            <td>Baseline</td>
+                            <td>{{entry.date}}</td>
+                            <td>{{entry.total}}</td>
+                            <td>{{entry.total|sub:goal}}
+                            <!-- <td>{% if entry.total > goal %} {% endif %}</td> -->
+                            <td>{{entry.notes}}</a></td>
+                            <td><a href = "">Edit</a></td>
+                            <td><a href = "">Delete</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
         <footer>
             <p>&#169; 2021 BetterSelf, Inc.</p>

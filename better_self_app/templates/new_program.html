@@ -19,7 +19,6 @@
             <a href="/my_account">My Account</a>
             <a href="/admin/logout">Logout</a>
         </nav>
-        <h1>Start a New Program</h1>
         <div id ="messages">
             {% if messages %}
             {% for message in messages %}    
@@ -28,8 +27,66 @@
             </p>
             {% endfor %}
             {% endif %}
-        </div> 
+        </div>
+        <div id="steps">
+            <h1>Steps</h1>
+            <ol>
+                <li>Decide on the behavior that you want to increase or decrease. 
+                    <ul>
+                        <li>
+                            For example, "Walk longer distances" or "Decrease cigarette smoking"
+                        </li>
+                    </ul> 
+                </li>
+                </li>
+                <li>Decide on the units to measure your behavior. 
+                    <ul>
+                        <li>
+                            For example, "steps," "cigarettes," "minutes," or "oz"
+                        </li>
+                    </ul> 
+                </li>
+                <li>Note whether you want the behavior to increase or decrease</li>
+                <li>Write a strong reason for why you want to better this behavior.
+                    <ul>
+                        <li>
+                            This will stay posted at the top of the page to remind you if things get tough                        
+                        </li>
+                    </ul> 
+                </li>
+                <li>Begin tracking your behavior at baseline
+                    <ul>
+                        <li>
+                            Don't make any changes in the behavior, just do what you normally would do.                        
+                        </li>
+                    </ul> 
+                </li>
+                <li>Go to the program on your account page and submit an entry for your daily baseline total.
+                    <ul>
+                        <li>
+                            Try to track your baseline for at least 3 days straight to get an accurate average                        
+                        </li>
+                    </ul>
+                </li>
+                <li>Your first intervention goal will be automatically generated based on your baseline average 
+                    <ul>
+                        <li>
+                            After you've met your goal, click "new goal" to challenge yourself even further!
+                        </li>
+                    </ul>
+                </li>
+                <li>When you're ready, start tracking your behavior during intervention 
+                    <ul>
+                        <li>
+                            Try your hardest to meet your goal every day, and use the motivational tools for inspiration!
+                        </li>
+                    </ul>
+                </li>
+                <li>Track your progress on your account page and enjoy being your better self!</li>
+            </ol>
+        </div>
         <div id="add_program">
+            <h1>Start a New Program</h1>
             <form action="/program/create_program" method="POST">
             {% csrf_token %}
                 <label for="behavior">Behavior</label>

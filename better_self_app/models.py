@@ -1,5 +1,7 @@
+from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from login_registration_app.models import User
+from datetime import date
 
 class QuoteManager(models.Manager):
     def create_quote_validator(self, postData):
@@ -22,6 +24,23 @@ class ProgramManager(models.Manager):
             errors['measurement'] = "Unit of measurement should be at least 2 characters"
         if len(postData['reason']) < 10:
             errors['reason'] = "Reason should be at least 10 characters"
+        return errors
+
+class BaselineManager(models.Manager):
+    def create_baseline_validator(self, postData):
+        today = date.today()
+        existing_date = Baseline.objects.filter(date = postData['date'])
+        errors = {}
+        if str(today) < postData['date']:
+            errors['future_date'] = "Date cannot be in the future"
+        elif postData['date'] <= "2021-09-01":
+            errors['invalid_date'] = "Date is not valid"
+        if len(existing_date) > 0:
+            errors['duplicate_date'] = "You already have an entry for that date"
+        if len(postData['total']) == 0:
+            errors['total'] = "You must enter a total"
+        if len(postData['notes']) > 0 and len(postData['notes']) < 5 :
+            errors['notes'] = "Notes can be blank or at least 5 characters"
         return errors
 
     # def update_quote_validator(self, postData):
@@ -54,3 +73,14 @@ class Program(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = ProgramManager()
+    # baseline_program
+
+class Baseline(models.Model):
+    date = models.DateField()
+    total = models.IntegerField()
+    notes = models.TextField()
+    user_baseline = models.ForeignKey(User, related_name="baseline_user", on_delete = models.CASCADE)
+    program_baseline = models.ForeignKey(Program, related_name="baseline_program", on_delete = models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = BaselineManager()
