@@ -17,7 +17,7 @@ urlpatterns = [
     # #Specific Program Page
     path('program/<int:program_id>', views.view_program), #GET request to display a specific program's info
     path('program/<int:program_id>/create_baseline', views.create_baseline), #POST request to create baseline entry
-    # path('program/<int:program_id>/add_intervention', views.add_intervention), #POST request to create intervention entry
+    path('program/<int:program_id>/create_intervention', views.create_intervention), #POST request to create intervention entry
     # path('program/<int:baseline_id>/edit_baseline', views.edit_baseline), #GET request to display form to edit a specific baseline entry
     # path('program/<int:baseline_id>/update_baseline', views.update_baseline), #POST request to update a specific baseline entry
     # path('program/<int:baseline_id>/delete_baseline', views.delete_baseline), #POST request to delete a specific baseline entry

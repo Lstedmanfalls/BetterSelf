@@ -29,14 +29,25 @@ class ProgramManager(models.Manager):
 class BaselineManager(models.Manager):
     def create_baseline_validator(self, postData):
         today = date.today()
-        existing_date = Baseline.objects.filter(date = postData['date'])
         errors = {}
         if str(today) < postData['date']:
             errors['future_date'] = "Date cannot be in the future"
         elif postData['date'] <= "2021-09-01":
             errors['invalid_date'] = "Date is not valid"
-        if len(existing_date) > 0:
-            errors['duplicate_date'] = "You already have an entry for that date"
+        if len(postData['total']) == 0:
+            errors['total'] = "You must enter a total"
+        if len(postData['notes']) > 0 and len(postData['notes']) < 5 :
+            errors['notes'] = "Notes can be blank or at least 5 characters"
+        return errors
+
+class InterventionManager(models.Manager):
+    def create_intervention_validator(self, postData):
+        today = date.today()
+        errors = {}
+        if str(today) < postData['date']:
+            errors['future_date'] = "Date cannot be in the future"
+        elif postData['date'] <= "2021-09-01":
+            errors['invalid_date'] = "Date is not valid"
         if len(postData['total']) == 0:
             errors['total'] = "You must enter a total"
         if len(postData['notes']) > 0 and len(postData['notes']) < 5 :
@@ -74,6 +85,7 @@ class Program(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     objects = ProgramManager()
     # baseline_program
+    # intervention_program
 
 class Baseline(models.Model):
     date = models.DateField()
@@ -84,3 +96,13 @@ class Baseline(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = BaselineManager()
+
+class Intervention(models.Model):
+    date = models.DateField()
+    total = models.IntegerField()
+    notes = models.TextField()
+    user_intervention = models.ForeignKey(User, related_name="intervention_user", on_delete = models.CASCADE)
+    program_intervention = models.ForeignKey(Program, related_name="intervention_program", on_delete = models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = InterventionManager()

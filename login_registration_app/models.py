@@ -42,5 +42,7 @@ class User(models.Model):
     objects = UserManager()
     # quote_uploader
     # quote_liker
+    # baseline_user
+    # intervention_user
     def __repr__(self):
         return f"Object_Name: {self.id}, {self.first_name}, {self.last_name}, {self.email}, {self.password}"
