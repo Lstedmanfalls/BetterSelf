@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Title</title>
     {% load static %}
+    {% load mathfilters %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
@@ -19,7 +20,12 @@
             <a href="/user/{{this_user.id}}/account">My Account</a>
             <a href="/admin/logout">Logout</a>
         </nav>
-        <h1>Say hello to your better self.</h1>
+        <div id="programs">
+            <h1>My Programs</h1>
+            {% for program in programs %}
+            <a href = "/program/{{program.id}}">{{program.behavior}}</a>
+            {% endfor %}
+        </div>
         <footer>
             <p>&#169; 2021 BetterSelf, Inc.</p>
             <p><a href="">Terms of Service</a> | <a href="">Privacy Policy</a></p>

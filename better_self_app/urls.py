@@ -17,15 +17,11 @@ urlpatterns = [
     # #Specific Program Page
     path('program/<int:program_id>', views.view_program), #GET request to display a specific program's info
     path('program/<int:program_id>/create_baseline', views.create_baseline), #POST request to create baseline entry
-    path('program/<int:program_id>/create_intervention', views.create_intervention), #POST request to create intervention entry
-    # path('program/<int:baseline_id>/edit_baseline', views.edit_baseline), #GET request to display form to edit a specific baseline entry
-    # path('program/<int:baseline_id>/update_baseline', views.update_baseline), #POST request to update a specific baseline entry
-    # path('program/<int:baseline_id>/delete_baseline', views.delete_baseline), #POST request to delete a specific baseline entry
-    # path('program/<int:intervention_id>/edit_intervention', views.edit_intervention), #GET request to display form to edit specific intervention entry
-    # path('program/<int:intervention_id>/update_intervention', views.update_intervention), #POST request to update a specific intervention entry
-    # path('program/<int:intervention_id>/delete_intervention', views.delete_intervention), #POST request to delete a specific intervention entry
+    path('program/<int:program_id>/create_intervention', views.create_intervention), #POST request to create intervention entrys
+    path('program/<int:program_id>/delete_baseline', views.delete_baseline), #POST request to delete a specific baseline entry
+    path('program/<int:program_id>/delete_intervention', views.delete_intervention), #POST request to delete a specific intervention entry
     # # My Account Page
-    # path('account/<int:user_id>', views.update_quote), #GET request to view specific account page
+    path('user/<int:user_id>/account', views.account), #GET request to view specific account page
     # path('account/<int:quote_id>/edit_quote', views.edit_quote), #GET request to display form to edit a specific quote    
     # path('account/<int:quote_id>/update_quote', views.update_quote), #POST request to update a specific quote
     # path('account/<int:quote_id>/delete_quote', views.delete_quote), #POST request to delete a specific object

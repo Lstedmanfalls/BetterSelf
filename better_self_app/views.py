@@ -182,3 +182,30 @@ def create_intervention(request, program_id): #POST REQUEST
     elif request.method == "POST":
         Intervention.objects.create(date = request.POST["date"], total = request.POST["total"], notes = request.POST["notes"], user_intervention = this_user, program_intervention = this_program)
     return redirect(f"/program/{program_id}")
+
+def delete_baseline(request, program_id): #POST REQUEST
+    this_baseline = Baseline.objects.get(id = request.POST["baseline_id"])
+    if request.method != "POST":
+        return redirect(f"/program/{program_id}")
+    if request.method == "POST":
+        this_baseline.delete()        
+    return redirect(f"/program/{program_id}")
+
+def delete_intervention(request, program_id): #POST REQUEST
+    this_intervention = Intervention.objects.get(id = request.POST["intervention_id"])
+    if request.method != "POST":
+        return redirect(f"/program/{program_id}")
+    if request.method == "POST":
+        this_intervention.delete()        
+    return redirect(f"/program/{program_id}")
+
+def account(request, user_id): #GET REQUEST
+    this_user = User.objects.get(id = request.session["user_id"])
+    if this_user.id != user_id:
+        return redirect ("/home")
+    programs = this_user.program_user.all()
+    context = {
+        "this_user": this_user,
+        "programs": programs
+    }
+    return render(request, "account.html", context)
