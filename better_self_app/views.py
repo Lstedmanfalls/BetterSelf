@@ -114,6 +114,7 @@ def view_program(request, program_id): #GET REQUEST
             change_direction = "increase"
             goal_statement = f"At least {goal} {this_program.measurement.lower()} per day" 
         context = {
+            "this_user":this_user,
             "baseline": baseline,
             "baseline_avg": baseline_avg,
             "baseline_avg_statement": baseline_avg_statement,
@@ -125,6 +126,7 @@ def view_program(request, program_id): #GET REQUEST
         if len(existing_baseline) >= 3:
             intervention_ready = True
             context = {
+            "this_user":this_user,
             "intervention_ready": intervention_ready,
             "baseline": baseline,
             "baseline_avg": baseline_avg,
@@ -138,6 +140,7 @@ def view_program(request, program_id): #GET REQUEST
         if len(existing_intervention) > 0:
             intervention = True
             context = {
+            "this_user":this_user,
             "intervention": intervention,
             "baseline": baseline,
             "baseline_avg": baseline_avg,
@@ -153,6 +156,7 @@ def view_program(request, program_id): #GET REQUEST
         else:
             change_direction = "increase"
         context = {
+        "this_user":this_user,
         "this_program": this_program,
         "change_direction": change_direction,
         }

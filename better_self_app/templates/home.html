@@ -10,16 +10,23 @@
 </head>
 <body>
     <div id="wrapper">
-        <nav>
-            <p>BetterSelf</p>
-            <p>Become a better version of yourself, one day at a time.</p>
-            <a href = "/home">Home</a>
-            <a href = "/quotes">Get Motivated</a>
-            <a href = "/program">Start Program</a>
-            <a href="/user/{{this_user.id}}/account">My Account</a>
-            <a href="/admin/logout">Logout</a>
-        </nav>
-        <h1>Say hello to your better self.</h1>
+        <div id="container">
+            <nav>
+                <div id="logo">
+                    <img src="/static/logo.png" alt="clapping hands logo">
+                    <p>BetterSelf</p>
+                    <p>Become a better version of yourself, one day at a time.</p>
+                </div>
+                <div id="nav_links">
+                    <a href = "/home">Home</a>
+                    <a href = "/quotes">Get Motivated</a>
+                    <a href = "/program">Start Program</a>
+                    <a href="/user/{{this_user.id}}/account">My Account</a>
+                    <a href="/admin/logout">Logout</a>
+                </div>
+            </nav>
+            <h1>Say hello to your better self.</h1>
+        </div>
         <footer>
             <p>&#169; 2021 BetterSelf, Inc.</p>
             <p><a href="">Terms of Service</a> | <a href="">Privacy Policy</a></p>

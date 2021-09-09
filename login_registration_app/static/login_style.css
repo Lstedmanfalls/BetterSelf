@@ -1,213 +1,213 @@
 /*Mobile responsiveness breakpoints: 
-    Mobile (< 480px)
-    Tablet (480px to 768px)
-    PC (>= 769) */
+Mobile (< 480px)
+Tablet (480px to 768px)
+PC (>= 769) */
 
-    *{
-        margin:0;
-        padding:0;
-    }
-    
-    html{
-        font-family:Verdana, Tahoma, sans-serif;
-        font-size:10px;
-    }
-    
-    @media only screen and (max-width:768px){
-    html{
-        font-size:8px;
-    }
-    }
-    
-    @media only screen and (max-width:480px){
-    html{
-        font-size:8px;
-    }
-    }
-    
-    #container{
-        position:relative;
-        min-height:100vh;
-    }
-    
-    #container::after{
-        content:"";
-        /* background-image:url("books.jpg"); */
-        opacity:.7;
-        top:0;
-        left:0;
-        bottom:0;
-        right:0;
-        position:absolute;
-        z-index:-1;
-    }
-    
-    header{
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-    }
-    
-    h1{
-        padding-top:8rem;
-        font-size:6rem;
-        text-align:center;
-    }
-    
-    @media only screen and (max-width:768px){
-    h1{
-        padding-top:5rem;
-    }
-    }
-    
-    @media only screen and (max-width:480px){
-    h1{
-        font-size:5rem;
-        padding-top:3rem;
-    }
-    }
-    
-    p{
-        font-size:3rem;
-        text-align:center;
-    }
-    
-    p{
-        padding:3rem 0 4rem 0;
-    }
-    
-    @media only screen and (max-width:768px){
-    p{
-        padding:3rem 1rem 4rem 1rem;
-    }
-    }
-    
-    @media only screen and (max-width:480px){
-    p{
-        padding:3rem 1rem 4rem 1rem;
-    }
-    }
-    
-    .messages{
-        box-sizing: border-box;
-        text-align:center;
-        color:#bf0000;
-        font-size:1.8rem;
-        padding:.5rem;
-        background-color:white;
-        border:.2rem solid black;
-        margin:0 auto;
-    }
-    
-    .error::marker{
-        color:transparent
-    }
-    
-    #wrapper{
-        display:flex;
-        justify-content:center;
-        padding-top:3rem;
-    }
-    
-    @media only screen and (max-width:480px){
-    #wrapper{
-        flex-direction:column;
-        align-items:center;    
-    }
-    }
-    
-    #wrapper div{
-        /* background-color:rgba(220, 208, 201, .8); */
-        width:25%;
-        margin:0 7rem;
-        border:.2rem solid black;
-        box-shadow:rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;;
-    }
-    
-    @media only screen and (max-width:768px){
-    #wrapper div{
-        width:40%;
-    }
-    }
-    
-    @media only screen and (max-width:480px){
-    #wrapper div {
-        width:80%;
-        margin-bottom:4rem;
-    }
-    }
-    
-    h2{
-        text-align:center;
-        font-size:4rem;
-        padding:1.5rem;
-        color:#2D3033;
-    }
-    
-    form{
-        display:flex;
-        flex-direction:column;
-        padding:0 3rem 2rem 3rem;
-    }
-    
-    #login{
-        height:25%;
-    }
-    
-    label{
-        font-size:2rem;
-        margin-bottom:.5rem;
-        color:#2D3033;
-    }
-    
-    input{
-        align-self:center;
-        margin-bottom:.8rem;
-        font-size:1.5rem;
-        width:100%;
-        padding:.5rem;
-        box-shadow:rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-    }
-    
-    input:-webkit-autofill,
-    input:-webkit-autofill:hover, 
-    input:-webkit-autofill:focus, 
-    input:-webkit-autofill:active{
-        -webkit-box-shadow:0 0 0 30px white inset;
-    }
-    
-    input:-webkit-autofill::first-line{
-        font-size:1.5rem;
-    }
-    
+*{
+    margin:0;
+    padding:0;
+}
+
+html{
+    font-family:Verdana, Tahoma, sans-serif;
+    font-size:10px;
+}
+
+@media only screen and (max-width:768px){
+html{
+    font-size:8px;
+}
+}
+
+@media only screen and (max-width:480px){
+html{
+    font-size:8px;
+}
+}
+
+#container{
+    position:relative;
+    min-height:100vh;
+}
+
+#container::after{
+    content:"";
+    /* background-image:url("books.jpg"); */
+    opacity:.7;
+    top:0;
+    left:0;
+    bottom:0;
+    right:0;
+    position:absolute;
+    z-index:-1;
+}
+
+header{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+h1{
+    padding-top:8rem;
+    font-size:6rem;
+    text-align:center;
+}
+
+@media only screen and (max-width:768px){
+h1{
+    padding-top:5rem;
+}
+}
+
+@media only screen and (max-width:480px){
+h1{
+    font-size:5rem;
+    padding-top:3rem;
+}
+}
+
+p{
+    font-size:3rem;
+    text-align:center;
+}
+
+p{
+    padding:3rem 0 4rem 0;
+}
+
+@media only screen and (max-width:768px){
+p{
+    padding:3rem 1rem 4rem 1rem;
+}
+}
+
+@media only screen and (max-width:480px){
+p{
+    padding:3rem 1rem 4rem 1rem;
+}
+}
+
+.messages{
+    box-sizing: border-box;
+    text-align:center;
+    color:#bf0000;
+    font-size:1.8rem;
+    padding:.5rem;
+    background-color:white;
+    border:.2rem solid black;
+    margin:0 auto;
+}
+
+.error::marker{
+    color:transparent
+}
+
+#wrapper{
+    display:flex;
+    justify-content:center;
+    padding-top:3rem;
+}
+
+@media only screen and (max-width:480px){
+#wrapper{
+    flex-direction:column;
+    align-items:center;    
+}
+}
+
+#wrapper div{
+    /* background-color:rgba(220, 208, 201, .8); */
+    width:25%;
+    margin:0 7rem;
+    border:.2rem solid black;
+    box-shadow:rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;;
+}
+
+@media only screen and (max-width:768px){
+#wrapper div{
+    width:40%;
+}
+}
+
+@media only screen and (max-width:480px){
+#wrapper div {
+    width:80%;
+    margin-bottom:4rem;
+}
+}
+
+h2{
+    text-align:center;
+    font-size:4rem;
+    padding:1.5rem;
+    color:#2D3033;
+}
+
+form{
+    display:flex;
+    flex-direction:column;
+    padding:0 3rem 2rem 3rem;
+}
+
+#login{
+    height:25%;
+}
+
+label{
+    font-size:2rem;
+    margin-bottom:.5rem;
+    color:#2D3033;
+}
+
+input{
+    align-self:center;
+    margin-bottom:.8rem;
+    font-size:1.5rem;
+    width:100%;
+    padding:.5rem;
+    box-shadow:rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    -webkit-box-shadow:0 0 0 30px white inset;
+}
+
+input:-webkit-autofill::first-line{
+    font-size:1.5rem;
+}
+
+button{
+    padding:.5rem 1rem;
+    width:50%;
+    font-size:2rem;
+    align-self:center;
+    margin-top:1rem;
+    box-shadow:rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    color:#2D3033;
+    background-color:#F8F8F8;
+}
+
+@media only screen and (max-width:480px){
     button{
-        padding:.5rem 1rem;
-        width:50%;
-        font-size:2rem;
-        align-self:center;
-        margin-top:1rem;
-        box-shadow:rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-        color:#2D3033;
-        background-color:#F8F8F8;
-    }
-    
-    @media only screen and (max-width:480px){
-        button{
-        width:45%;
-    }
-    }
-    
-    button:hover{
-        cursor:pointer;
-        background-color:#E0E0E0;
-    }
-    
-    #login button{
-        width:35%;
-    }
-    
-    @media only screen and (min-width:769px){
-    #login button{
-        width:40%;
-    }
-    }
+    width:45%;
+}
+}
+
+button:hover{
+    cursor:pointer;
+    background-color:#E0E0E0;
+}
+
+#login button{
+    width:35%;
+}
+
+@media only screen and (min-width:769px){
+#login button{
+    width:40%;
+}
+}

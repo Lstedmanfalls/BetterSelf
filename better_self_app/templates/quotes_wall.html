@@ -10,57 +10,64 @@
 </head>
 <body>
     <div id="wrapper">
-        <nav>
-            <p>BetterSelf</p>
-            <p>Become a better version of yourself, one day at a time.</p>
-            <a href = "/home">Home</a>
-            <a href = "/quotes">Get Motivated</a>
-            <a href = "/program">Start Program</a>
-            <a href="/user/{{this_user.id}}/account">My Account</a>
-            <a href="/admin/logout">Logout</a>
-        </nav>
-        <h1>Quotes Wall</h1>
-        <div id ="messages">
-            {% if messages %}
-            {% for message in messages %}    
-            <p class="messages">    
-            {{ message }}   
-            </p>
-            {% endfor %}
-            {% endif %}
-        </div>
-        <div id="quotes">
-            {% for quote in all_the_quotes %}
-            <p>{{quote.quote}}</p>
-            <p>{{quote.author}}</p>
-            <p>Added by:</p>
-            <p>{{quote.user_who_uploaded.display_name}}</p>
-            <p>Number of Likes:</p>
-                {{quote.user_who_liked.count}}
-            </p>
-            {% if this_user in quote.user_who_liked.all %}
-            <form action="quotes/{{quote.id}}/unlike" method="POST">
-            {% csrf_token %}
-                <button type="submit">Unlike</button>
-            </form>
-            {% else %}
-            <form action="quotes/{{quote.id}}/like" method="POST">
-            {% csrf_token %}
-                <button type="submit">Like</button>
-            </form>
-            {% endif %}
-            {% endfor %}
-        </div>    
-        <div id="add_quote">
-            <h2>Add a Quote</h2>
-            <form action="/quotes/create_quote" method="POST">
-            {% csrf_token %}
-                <label for="quote">Quote</label>
-                <textarea name="quote"></textarea>
-                <label for="author">Quote Author</label>
-                <input name="author" type="text">
-                <button type="submit">Submit</button>
-            </form>
+        <div id="container">
+            <nav>
+                <div id="logo">
+                    <img src="/static/logo.png" alt="clapping hands logo">
+                    <p>BetterSelf</p>
+                    <p>Become a better version of yourself, one day at a time.</p>
+                </div>
+                <div id="nav_links">
+                    <a href = "/home">Home</a>
+                    <a href = "/quotes">Get Motivated</a>
+                    <a href = "/program">Start Program</a>
+                    <a href="/user/{{this_user.id}}/account">My Account</a>
+                    <a href="/admin/logout">Logout</a>
+                </div>
+            </nav>
+            <h1>Dream. Act. Share. Inspire.</h1>
+            <div id ="messages">
+                {% if messages %}
+                {% for message in messages %}    
+                <p class="messages">    
+                {{ message }}   
+                </p>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div id="quotes">
+                {% for quote in all_the_quotes %}
+                <p>{{quote.quote}}</p>
+                <p>{{quote.author}}</p>
+                <p>Added by:</p>
+                <p>{{quote.user_who_uploaded.display_name}}</p>
+                <p>Number of Likes:</p>
+                    {{quote.user_who_liked.count}}
+                </p>
+                {% if this_user in quote.user_who_liked.all %}
+                <form action="quotes/{{quote.id}}/unlike" method="POST">
+                {% csrf_token %}
+                    <button type="submit">Unlike</button>
+                </form>
+                {% else %}
+                <form action="quotes/{{quote.id}}/like" method="POST">
+                {% csrf_token %}
+                    <button type="submit">Like</button>
+                </form>
+                {% endif %}
+                {% endfor %}
+            </div>    
+            <div id="add_quote">
+                <h2>Add a Quote</h2>
+                <form action="/quotes/create_quote" method="POST">
+                {% csrf_token %}
+                    <label for="quote">Quote</label>
+                    <textarea name="quote"></textarea>
+                    <label for="author">Quote Author</label>
+                    <input name="author" type="text">
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
         </div>
         <footer>
             <p>&#169; 2021 BetterSelf, Inc.</p>

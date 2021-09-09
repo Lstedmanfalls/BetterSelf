@@ -1,0 +1,57 @@
+:root {
+    --blue: #1e90ff;
+    --white: #ffffff; 
+}
+
+*{
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-size: 10px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#container{
+    min-height:95vh;
+}
+
+nav{
+    padding:1rem 2rem;
+    border-bottom: .1rem solid black;
+}
+
+nav, #logo, #nav-links{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#logo img{
+    height:auto;
+    width:45px;
+}
+
+#logo p:first-of-type{
+    font-size:2rem;
+    padding: 0 2rem;
+}
+
+#logo p:nth-of-type(2){
+    font-size: 1rem;
+}
+
+#nav_links{
+    font-size:1rem;
+}
+
+#nav_links a{
+    padding: 0 .5rem;
+}
+
+h1{
+    font-size:3rem;
+    text-align: center;
+    padding-top:2rem;
+}

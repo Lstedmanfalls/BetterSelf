@@ -11,144 +11,151 @@
 </head>
 <body>
     <div id="wrapper">
-        <nav>
-            <p>BetterSelf</p>
-            <p>Become a better version of yourself, one day at a time.</p>
-            <a href = "/home">Home</a>
-            <a href = "/quotes">Get Motivated</a>
-            <a href = "/program">Start Program</a>
-            <a href="/user/{{this_user.id}}/account">My Account</a>
-            <a href="/admin/logout">Logout</a>
-        </nav>
-        <div id ="program">
-            <h1>{{this_program.behavior}}</h1>
-            <p>I am going to {{change_direction}} my number of {{this_program.measurement.lower}} each day</p>
-            <h2>My Reason</h2>
-            <div id="reason">
-                <p>{{this_program.reason}}</p>
-            </div>
-            {% if baseline == True %}
-            <h2>Baseline Average</h2>
-            <div id="baseline_avg">
-                <p>{{baseline_avg_statement}}</p>
-            </div>
-            <h2>Current Goal</h2>
-            <div id="goal">
-                <p>{{goal_statement}}</p>
-                <form action="/program/{{this_program.id}}/new_goal" method="POST">
-                {% csrf_token %}
-                    <button type="submit">Generate New Goal</button>
-                </form>
-            </div>
-            {% endif %}
-            <h2>Add Baseline Entry</h2>
-            <div id="add_baseline">
-                <form action="/program/{{this_program.id}}/create_baseline" method="POST">
-                {% csrf_token %}
-                    <label for="date">Date</label>
-                    <input name="date" type="date" value = "2021-09-01">
-                    <label for="total">Day Total</label>
-                    <input name="total" type="number" min="0">
-                    <label for="notes">Notes</label>
-                    <textarea name="notes"></textarea>
-                    <button type="submit">Submit</button>
-                </form>
-                <div id ="messages">
-                    {% if messages %}
-                    {% for message in messages %}    
-                    <p class="messages">    
-                    {{ message }}   
-                    </p>
-                    {% endfor %}
-                    {% endif %}
+        <div id="container">
+            <nav>
+                <div id="logo">
+                    <img src="/static/logo.png" alt="clapping hands logo">
+                    <p>BetterSelf</p>
+                    <p>Become a better version of yourself, one day at a time.</p>
                 </div>
-            </div>
-            <h2>Add Intervention Entry</h2>
-            <div id="add_intervention">
-                <form action="/program/{{this_program.id}}/create_intervention" method="POST">
-                {% csrf_token %}
-                    <label for="date">Date</label>
-                    <input name="date" type="date" value = "2021-09-01">
-                    <label for="total">Day Total</label>
-                    <input name="total" type="number" min="0">
-                    <label for="notes">Notes</label>
-                    <textarea name="notes"></textarea>
-                    <button type="submit">Submit</button>
-                </form>
-                <div id ="messages">
-                    {% if messages %}
-                    {% for message in messages %}    
-                    <p class="messages">    
-                    {{ message }}   
-                    </p>
-                    {% endfor %}
+                <div id="nav_links">
+                    <a href = "/home">Home</a>
+                    <a href = "/quotes">Get Motivated</a>
+                    <a href = "/program">Start Program</a>
+                    <a href="/user/{{this_user.id}}/account">My Account</a>
+                    <a href="/admin/logout">Logout</a>
                 </div>
-            </div>
-            {% endif %}
-            {% if baseline == True %}
-            <h1>Program Progress</h1>
-            <div id="table">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Phase</th>
-                            <th>Date</th>
-                            <th>{{this_program.measurement}}</th>
-                            <th>Change From Goal</th>
-                            <th>Daily Goal Met?</th>
-                            <th>Notes</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for entry in this_program.baseline_program.all %}
-                        <tr>
-                            <td>Baseline</td>
-                            <td>{{entry.date}}</td>
-                            <td>{{entry.total}}</td>
-                            <td>N/A</td>
-                            <td>N/A</td>
-                            <td>{{entry.notes}}</a></td>
-                            <td>
-                                <form action="/program/{{this_program.id}}/delete_baseline" method="POST">
-                                    {% csrf_token %}
-                                    <input name="baseline_id" type="hidden" value="{{entry.id}}">
-                                    <button type="submit">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                        {% if baseline == True and intervention == True %}
-                        {% for entry in this_program.intervention_program.all %}
-                        <tr>
-                            <td>Intervention</td>
-                            <td>{{entry.date}}</td>
-                            <td>{{entry.total}}</td>
-                            <td>{{entry.total|sub:goal}}
-                            <td>{% if this_program.direction == 0 %}
-                                {% if goal >= entry.total %}
-                                    Yes {% else %} No {% endif %}
-                                {% endif %}
-                                {% if this_program.direction == 1 %} 
-                                {% if entry.total >= goal %}
-                                Yes {% else %} No {% endif %}
-                                {% endif %}
-                            </td>
-                            <td>{{entry.notes}}</a></td>
-                            <td>
-                                <form action="/program/{{this_program.id}}/delete_intervention" method="POST">
-                                    {% csrf_token %}
-                                    <input name="intervention_id" type="hidden" value="{{entry.id}}">
-                                    <button type="submit">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
+            </nav>
+            <div id ="program">
+                <h1>My {{this_program.behavior}} Program</h1>
+                <p>I am going to {{change_direction}} my number of {{this_program.measurement.lower}} each day</p>
+                <h2>My Reason</h2>
+                <div id="reason">
+                    <p>{{this_program.reason}}</p>
+                </div>
+                {% if baseline == True %}
+                <h2>Baseline Average</h2>
+                <div id="baseline_avg">
+                    <p>{{baseline_avg_statement}}</p>
+                </div>
+                <h2>Current Goal</h2>
+                <div id="goal">
+                    <p>{{goal_statement}}</p>
+                    <form action="/program/{{this_program.id}}/new_goal" method="POST">
+                    {% csrf_token %}
+                        <button type="submit">Generate New Goal</button>
+                    </form>
+                </div>
+                {% endif %}
+                <h2>Add Baseline Entry</h2>
+                <div id="add_baseline">
+                    <form action="/program/{{this_program.id}}/create_baseline" method="POST">
+                    {% csrf_token %}
+                        <label for="date">Date</label>
+                        <input name="date" type="date" value = "2021-09-01">
+                        <label for="total">Day Total</label>
+                        <input name="total" type="number" min="0">
+                        <label for="notes">Notes</label>
+                        <textarea name="notes"></textarea>
+                        <button type="submit">Submit</button>
+                    </form>
+                    <div id ="messages">
+                        {% if messages %}
+                        {% for message in messages %}    
+                        <p class="messages">    
+                        {{ message }}   
+                        </p>
                         {% endfor %}
                         {% endif %}
-                    </tbody>
-                </table>
+                    </div>
+                </div>
+                <h2>Add Intervention Entry</h2>
+                <div id="add_intervention">
+                    <form action="/program/{{this_program.id}}/create_intervention" method="POST">
+                    {% csrf_token %}
+                        <label for="date">Date</label>
+                        <input name="date" type="date" value = "2021-09-01">
+                        <label for="total">Day Total</label>
+                        <input name="total" type="number" min="0">
+                        <label for="notes">Notes</label>
+                        <textarea name="notes"></textarea>
+                        <button type="submit">Submit</button>
+                    </form>
+                    <div id ="messages">
+                        {% if messages %}
+                        {% for message in messages %}    
+                        <p class="messages">    
+                        {{ message }}   
+                        </p>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% if baseline == True %}
+                <h2>Program Progress</h2>
+                <div id="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Phase</th>
+                                <th>Date</th>
+                                <th>{{this_program.measurement}}</th>
+                                <th>Change From Goal</th>
+                                <th>Daily Goal Met?</th>
+                                <th>Notes</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for entry in this_program.baseline_program.all %}
+                            <tr>
+                                <td>Baseline</td>
+                                <td>{{entry.date}}</td>
+                                <td>{{entry.total}}</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
+                                <td>{{entry.notes}}</a></td>
+                                <td>
+                                    <form action="/program/{{this_program.id}}/delete_baseline" method="POST">
+                                        {% csrf_token %}
+                                        <input name="baseline_id" type="hidden" value="{{entry.id}}">
+                                        <button type="submit">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% if baseline == True and intervention == True %}
+                            {% for entry in this_program.intervention_program.all %}
+                            <tr>
+                                <td>Intervention</td>
+                                <td>{{entry.date}}</td>
+                                <td>{{entry.total}}</td>
+                                <td>{{entry.total|sub:goal}}
+                                <td>{% if this_program.direction == 0 %}
+                                    {% if goal >= entry.total %}
+                                        Yes {% else %} No {% endif %}
+                                    {% endif %}
+                                    {% if this_program.direction == 1 %} 
+                                    {% if entry.total >= goal %}
+                                    Yes {% else %} No {% endif %}
+                                    {% endif %}
+                                </td>
+                                <td>{{entry.notes}}</a></td>
+                                <td>
+                                    <form action="/program/{{this_program.id}}/delete_intervention" method="POST">
+                                        {% csrf_token %}
+                                        <input name="intervention_id" type="hidden" value="{{entry.id}}">
+                                        <button type="submit">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                {% endif %}
             </div>
-            {% endif %}
         </div>
         <footer>
             <p>&#169; 2021 BetterSelf, Inc.</p>
