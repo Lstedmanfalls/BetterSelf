@@ -1,5 +1,6 @@
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
+from django.db.models.query_utils import Q
 from login_registration_app.models import User
 from datetime import date
 
@@ -13,6 +14,14 @@ class QuoteManager(models.Manager):
             errors['author'] = "Author should be at least 5 characters"
         elif len(existing_quotes) > 0:
             errors['duplicate'] = "That quote already exists"
+        return errors
+    
+    def update_quote_validator(self, postData):
+        errors = {}
+        if len(postData['quote']) < 10:
+            errors['label'] = "Quote should be at least 10 characters"
+        if len(postData['author']) < 5:
+            errors['author'] = "Author should be at least 5 characters"
         return errors
 
 class ProgramManager(models.Manager):
@@ -53,18 +62,6 @@ class InterventionManager(models.Manager):
         if len(postData['notes']) > 0 and len(postData['notes']) < 5 :
             errors['notes'] = "Notes can be blank or at least 5 characters"
         return errors
-
-    # def update_quote_validator(self, postData):
-    #     today = date.today()
-    #     existing_objects = Class_Name.objects.filter(label = postData['label'])
-    #     errors = {}
-    #     if len(postData['label']) < 2:
-    #         errors['label'] = "Label should be at least 2 characters"
-    #     if str(today) <= postData['label']:
-    #         errors['label'] = "Label cannot be now or in the future"
-    #     elif len(existing_objects) > 0:
-    #         errors['duplicate'] = "That object already exists"
-    #     return errors
 
 class Quote(models.Model):
     quote = models.TextField()    

@@ -20,10 +20,71 @@
             <a href="/user/{{this_user.id}}/account">My Account</a>
             <a href="/admin/logout">Logout</a>
         </nav>
+        <div id ="messages">
+            {% if messages %}
+            {% for message in messages %}    
+            <p class="messages">    
+            {{ message }}   
+            </p>
+            {% endfor %}
+            {% endif %}
+        </div>
         <div id="programs">
             <h1>My Programs</h1>
             {% for program in programs %}
             <a href = "/program/{{program.id}}">{{program.behavior}}</a>
+            {% endfor %}
+        </div>
+        <div id="update_display_name">
+            <h1>Change Display Name</h1>
+            <form action="/user/{{this_user.id}}/account/update_display_name" method="POST">
+            {% csrf_token %}
+                <label for="display_name">New Display Name</label>
+                <input name="display_name" type="text" value = "{{this_user.display_name}}">
+                <button type="submit">Update Display Name</button>
+            </form>
+        </div>
+        <div id="update_password">
+            <h1>Change Password</h1>
+            <form action="/user/{{this_user.id}}/account/update_password" method="POST">
+            {% csrf_token %}
+                <label for="password">Password</label>
+                <input name="password" type="password">
+                <label for="password_confirm">Confirm Password</label>
+                <input name="password_confirm" type="password">
+                <button type="submit">Change Password</button>
+            </form>
+        </div>
+        <div id="my_quotes">
+            <h1>My Quotes</h1>
+            {% for quote in this_user.quote_uploader.all %}
+            <form action="/user/{{this_user.id}}/account/update_quote" method="POST">
+            {% csrf_token %}
+                <input name="quote_id" type="hidden" value="{{quote.id}}">
+                <label for="quote">Quote</label>
+                <textarea name="quote">{{quote.quote}}</textarea>
+                <label for="author">Author</label>
+                <input name="author" type="text" value="{{quote.author}}">
+                <button type="submit">Update Quote</button>
+            </form>
+            <form action="/user/{{this_user.id}}/account/delete_quote" method="POST">
+            {% csrf_token %}
+                <input name="quote_id" type="hidden" value="{{quote.id}}">
+                <button type="submit">Delete Quote</button>
+            </form>
+            {% endfor %}
+        </div>
+        <div id="liked_quotes">
+            <h1>My Liked Quotes</h1>
+            {% for quote in this_user.quote_liker.all %}
+            <p>Quote: {{quote.quote}}</p>
+            <p>Author: {{quote.author}}</p>
+            <p>Added by: {{quote.user_who_uploaded.display_name}}</p>
+            <form action="/user/{{this_user.id}}/account/unlike" method="POST">
+                {% csrf_token %}
+                <input name = "quote_id" type ="hidden" value="{{quote.id}}">
+                <button type="submit">Unlike</button>
+                </form>
             {% endfor %}
         </div>
         <footer>

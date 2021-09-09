@@ -22,8 +22,9 @@ urlpatterns = [
     path('program/<int:program_id>/delete_intervention', views.delete_intervention), #POST request to delete a specific intervention entry
     # # My Account Page
     path('user/<int:user_id>/account', views.account), #GET request to view specific account page
-    # path('account/<int:quote_id>/edit_quote', views.edit_quote), #GET request to display form to edit a specific quote    
-    # path('account/<int:quote_id>/update_quote', views.update_quote), #POST request to update a specific quote
-    # path('account/<int:quote_id>/delete_quote', views.delete_quote), #POST request to delete a specific object
-    # path('account/<int:quote_id>/unlike', views.account_unlike), #POST request to delete a like object from quote on account page
+    path('user/<int:user_id>/account/update_password', views.update_password), #POST request to change password
+    path('user/<int:user_id>/account/update_display_name', views.update_display_name), #POST request to change password
+    path('user/<int:user_id>/account/update_quote', views.update_quote), #POST request to update a specific quote
+    path('user/<int:user_id>/account/delete_quote', views.delete_quote), #POST request to delete a specific object
+    path('user/<int:user_id>/account/unlike', views.account_unlike), #POST request to delete a like object from quote on account page
 ]

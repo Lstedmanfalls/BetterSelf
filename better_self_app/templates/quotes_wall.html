@@ -34,7 +34,7 @@
             <p>{{quote.quote}}</p>
             <p>{{quote.author}}</p>
             <p>Added by:</p>
-            <p>{{quote.user_who_uploaded.first_name}}</p>
+            <p>{{quote.user_who_uploaded.display_name}}</p>
             <p>Number of Likes:</p>
                 {{quote.user_who_liked.count}}
             </p>
@@ -56,7 +56,7 @@
             <form action="/quotes/create_quote" method="POST">
             {% csrf_token %}
                 <label for="quote">Quote</label>
-                <input name="quote" type="text">
+                <textarea name="quote"></textarea>
                 <label for="author">Quote Author</label>
                 <input name="author" type="text">
                 <button type="submit">Submit</button>

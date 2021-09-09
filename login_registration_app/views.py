@@ -20,7 +20,7 @@ def register(request): #POST REQUEST
     elif request.method == "POST":
             password = request.POST['password']
             pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
-            user = User.objects.create(first_name = request.POST["first_name"], last_name = request.POST["last_name"], email = request.POST['email'], password=pw_hash)
+            user = User.objects.create(first_name = request.POST["first_name"], last_name = request.POST["last_name"], display_name = request.POST['display_name'], email = request.POST['email'], password=pw_hash)
             request.session['user_id'] = user.id
     return redirect("/home")
 
