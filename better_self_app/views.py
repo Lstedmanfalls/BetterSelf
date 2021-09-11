@@ -7,11 +7,11 @@ from django.db.models import Avg, base
 from datetime import date
 import bcrypt
 
-# Landing page viewable to all public
+# --------- Landing page viewable to public
 def landing_page(request): #GET REQUEST
     return render(request, "landing_page.html")
 
-# Home page after login
+# --------- Landing page after login (new links / access to links)
 def home(request): #GET REQUEST
     if "user_id" not in request.session:
         messages.error(request, "You must be logged in to view this site")
@@ -21,7 +21,7 @@ def home(request): #GET REQUEST
     }
     return render(request, "home.html", context)
 
-# Quotes wall page
+# --------- Quotes wall page
 def quotes_wall(request): #GET REQUEST
     if "user_id" not in request.session:
         messages.error(request, "You must be logged in to view this site")
@@ -66,7 +66,7 @@ def unlike(request, quote_id): #POST REQUEST
         this_user.quote_liker.remove(this_quote)
     return redirect("/quotes")
 
-# New program page
+# --------- New program page
 def new_program(request): #GET REQUEST
     if "user_id" not in request.session:
         messages.error(request, "You must be logged in to view this site")
@@ -91,75 +91,80 @@ def create_program(request): #POST REQUEST
         program_id = create.id
     return redirect(f"/program/{program_id}")
 
-# Specific program page, specific to a user
+# ---------  Specific program page, for a specific user
 def view_program(request, program_id): #GET REQUEST
+    # User must be logged in
     if "user_id" not in request.session:
         messages.error(request, "You must be logged in to view this site")
         return redirect ("/admin")
     this_user = User.objects.get(id=request.session["user_id"])
     this_program = Program.objects.get(id = program_id)
+    
+    # User cannot view another person's programs
     if this_user.id != this_program.user_program.id:
         return redirect ("/home")
+    
+    # Determine direction of desired behavior change
+    if this_program.direction == 0:
+        change_direction = "decrease"
+    else:
+        change_direction = "increase"
+
+    # Default context before any baseline entries have been added
+    context = {
+        "this_user":this_user,
+        "this_program": this_program,
+        "change_direction": change_direction,
+        }
+
+    # If a baseline entry has been added, context includes the baseline average and goal, and related statements 
     existing_baseline = this_program.baseline_program.all()
     if len(existing_baseline) > 0:
         baseline = True
         baseline_avg = int(this_program.baseline_program.aggregate(Avg('total'))["total__avg"])
         baseline_avg_statement = f"{baseline_avg} {this_program.measurement.lower()} each day"
+
+        # Goal is set as 10% more or less than the baseline average, depending on desired change direction
         if this_program.direction == 0:
             goal = int(baseline_avg - (baseline_avg * .1))
-            change_direction = "decrease"
             goal_statement = f"No more than {goal} {this_program.measurement.lower()} per day"
         else:
             goal = int(baseline_avg + (baseline_avg * .1))
-            change_direction = "increase"
-            goal_statement = f"At least {goal} {this_program.measurement.lower()} per day" 
-        context = {
-            "this_user":this_user,
-            "baseline": baseline,
-            "baseline_avg": baseline_avg,
-            "baseline_avg_statement": baseline_avg_statement,
-            "goal": goal,
-            "this_program": this_program,
-            "change_direction": change_direction,
-            "goal_statement" : goal_statement,
-        }
+            goal_statement = f"At least {goal} {this_program.measurement.lower()} per day"
+
+        context["baseline"] = baseline
+        context["baseline_avg"] = baseline_avg
+        context["baseline_avg_statement"] = baseline_avg_statement
+        context["goal"] = goal
+        context["goal_statement"] = goal_statement
+
+        # If at least 3 baseline entries have been added, user can begin entering intervention data
         if len(existing_baseline) >= 3:
             intervention_ready = True
-            context = {
-            "this_user":this_user,
-            "intervention_ready": intervention_ready,
-            "baseline": baseline,
-            "baseline_avg": baseline_avg,
-            "baseline_avg_statement": baseline_avg_statement,
-            "goal": goal,
-            "this_program": this_program,
-            "change_direction": change_direction,
-            "goal_statement" : goal_statement,
-        }
+            context["intervention_ready"] = intervention_ready
+
+        # If an intervention entry has been added, the intervention data shows in the table
         existing_intervention = this_program.intervention_program.all()
         if len(existing_intervention) > 0:
             intervention = True
-            context = {
-            "this_user":this_user,
-            "intervention": intervention,
-            "baseline": baseline,
-            "baseline_avg": baseline_avg,
-            "baseline_avg_statement": baseline_avg_statement,
-            "goal": goal,
-            "this_program": this_program,
-            "change_direction": change_direction,
-            "goal_statement" : goal_statement,
-        }
-    else:
-        if this_program.direction == 0:
-            change_direction = "decrease"
-        else:
-            change_direction = "increase"
-        context = {
-        "this_user":this_user,
-        "this_program": this_program,
-        "change_direction": change_direction,
-        }
+            context["intervention"] = intervention
+
+        # # If at least 7 intervention entries have been added, and goal has been met each time, user can generate a new goal
+        # count = 0
+        # if len(existing_intervention) >= 7:
+        #     for i in existing_intervention:
+        #         if change_direction == "decrease":
+        #             if i.total <= goal:
+        #                 count += 1
+        #                 if count >=7:
+        #                     new_goal_ready = True
+        #                     context["new_goal_ready"] = new_goal_ready
+        #         if change_direction == "increase":
+        #             if i.total >= goal:
+        #                 count += 1
+        #                 if count >=7:
+        #                     new_goal_ready = True
+        #                     context["new_goal_ready"] = new_goal_ready
     return render(request, "view_program.html", context)
 
 def create_baseline(request, program_id): #POST REQUEST
@@ -208,11 +213,14 @@ def delete_intervention(request, program_id): #POST REQUEST
         this_intervention.delete()        
     return redirect(f"/program/{program_id}")
 
-# Specific user account page
+# --------- Specific user account page
 def account(request, user_id): #GET REQUEST
     this_user = User.objects.get(id = request.session["user_id"])
+
+    # User cannot view another person's account page
     if this_user.id != user_id:
         return redirect ("/home")
+        
     programs = this_user.program_user.all()
     context = {
         "this_user": this_user,
@@ -285,7 +293,7 @@ def delete_quote(request, user_id): #POST REQUEST
         this_quote.delete()        
     return redirect(f"/user/{user_id}/account")
 
-def account_unlike(request, user_id): #POST REQUEST
+def account_unlike(request, user_id): #POST REQUEST (unlike quote from own account page)
     this_user = User.objects.get(id = request.session["user_id"])
     this_quote = Quote.objects.get(id = request.POST["quote_id"])
     if request.method != "POST":

@@ -1,0 +1,169 @@
+:root {
+    --yellow: #FFE66D;
+    --maroon: #9b422a;
+    --shadow: rgba(0, 0, 0, 0.15) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px;
+}
+
+*{
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-size: 10px;
+    font-family: 'Open sans', sans-serif;
+}
+
+#wrapper{
+    min-height:94vh;
+    background-color: var(--yellow);
+}
+
+#container{
+    background-color: var(--yellow);
+    border-top: .1rem solid black;
+}
+
+#container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom:3rem;
+}
+
+.block{
+    display: flex;
+    justify-content: space-between;
+    width:85%;
+    padding-top:3rem;
+}
+
+nav{
+    padding:1rem 8rem;
+    background-color: white;
+}
+
+nav, #logo, #nav_links{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#logo img{
+    height:auto;
+    width:45px;
+}
+
+#logo p:first-of-type{
+    font-size:2rem;
+    padding: 0 3rem 0 .2rem;
+    color:var(--maroon);
+    font-weight: bold;
+}
+
+#logo p:nth-of-type(2), #nav_links {
+    font-size: 1.2rem;
+}
+
+#nav_links a{
+    margin: 0 .2rem;
+}
+
+a, button{
+    padding:.5rem 1rem;
+    text-decoration: none;
+    color:white;
+    background-color: var(--maroon);
+}
+
+a:hover{
+    background-color:black;
+    color:white;
+}
+
+button:hover{
+    background-color:black;
+    color:white;
+    cursor:pointer;
+}
+
+h1{
+    font-size:3.5rem;
+    text-align: center;
+    padding-top:2rem;
+    padding-bottom: 1rem;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+h2{
+    font-family: 'Roboto', sans-serif;
+    font-size: 2rem;
+    text-align: center;
+}
+
+p{
+    font-size:1.25rem;
+}
+
+form{
+    display:flex;
+    flex-direction: column;
+}
+
+label{
+    font-size:1.5rem;
+    margin-bottom:.5rem;
+}
+
+input, select{
+    padding:.5rem;
+    font-size:1rem;
+    font-family: 'Open sans', sans-serif;
+    margin-bottom:1.5rem;
+}
+
+textarea{
+    height:4rem;
+    resize: none;
+    overflow: auto;
+    padding:.5rem;
+    font-size:1rem;
+    font-family: 'Open sans', sans-serif;
+    margin-bottom: 1rem;
+}
+
+form button{
+    padding:.5rem 1rem;
+    align-self: center;
+    width:35%;
+    font-size:1.2rem;
+}
+
+button{
+    font-size:1rem;
+}
+
+footer{
+    background-color: white;
+    font-size:1rem;
+    padding-left:8.5rem;
+    padding-top:.4rem;
+    border-top:.1rem solid black;
+}
+
+footer p{
+    font-size:1rem;
+}
+
+footer a{
+    padding:0;
+    background-color: white;
+    color: var(--maroon);
+    font-weight: bold;
+}
+
+footer a:hover{
+    padding:0;
+    background-color: white;
+    color:black;
+}

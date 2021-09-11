@@ -1,0 +1,68 @@
+#quotes{
+    background-color: white;
+    border:.2rem solid black;
+    padding:1rem 2rem;
+    width:60%;
+    box-shadow: var(--shadow);
+}
+
+.quote{
+    font-size:1.5rem;
+    color:green;
+    font-weight: bold;
+}
+
+.author{
+    padding-bottom:1rem;
+    padding-left:.5rem;
+    font-weight: bold;
+}
+
+.added_by{
+    font-style: italic;
+    font-size: 1rem;
+    padding-left:1.5rem;
+    padding-bottom: .5rem;
+}
+
+#quotes button{
+    margin-bottom:2.5rem;
+    margin-right:.3rem;
+    margin-left:1.5rem;
+    padding:0.2rem .5rem;
+    background-color: green ;
+    color:white;
+    box-shadow: var(--shadow);
+    width:auto;
+    font-size:.9rem;
+}
+
+#quotes button:hover{
+    background-color: darkgreen;
+    color:white;
+}
+
+#quotes form p{
+    font-size: 1rem;
+    color:green
+}
+
+#add_quote{
+    width:25%;
+}
+
+#add_quote p{
+    text-align: center;
+    padding-top:1rem;
+    color:var(--maroon)
+}
+
+#add_quote h2{
+    text-align: center;
+    padding-bottom:1rem;
+}
+
+#no_quotes{
+    font-size:1rem;
+    font-style: italic;
+}

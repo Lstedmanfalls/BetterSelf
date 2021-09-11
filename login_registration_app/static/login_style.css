@@ -32,14 +32,15 @@ html{
 
 #container::after{
     content:"";
-    /* background-image:url("books.jpg"); */
-    opacity:.7;
+    background-image:url("sunflower.jpg");
+    opacity:.6;
     top:0;
     left:0;
     bottom:0;
     right:0;
     position:absolute;
     z-index:-1;
+    background-size: cover;
 }
 
 header{
@@ -117,9 +118,9 @@ p{
 }
 
 #wrapper div{
-    /* background-color:rgba(220, 208, 201, .8); */
+    background-color:rgba(225, 225, 225, .8);
     width:25%;
-    margin:0 7rem;
+    margin:2rem 7rem;
     border:.2rem solid black;
     box-shadow:rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;;
 }
@@ -187,8 +188,8 @@ button{
     align-self:center;
     margin-top:1rem;
     box-shadow:rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-    color:#2D3033;
-    background-color:#F8F8F8;
+    color:white;
+    background-color:#9b422a;
 }
 
 @media only screen and (max-width:480px){
@@ -199,7 +200,8 @@ button{
 
 button:hover{
     cursor:pointer;
-    background-color:#E0E0E0;
+    background-color:black;
+    color:white;
 }
 
 #login button{
