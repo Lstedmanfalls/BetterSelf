@@ -1,0 +1,95 @@
+h2{
+    margin-bottom:1rem;
+}
+
+#user_info{
+    width:20%;
+}
+
+#programs{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#program_links, #update_display_name, #update_password, #uploaded_quotes{
+    margin:.5rem 0 2.5rem 0;
+}
+
+#programs a{
+    background-color:var(--yellow);
+    color:var(--maroon);
+    font-size:1.5rem;
+    font-weight: bold;
+    padding:0;
+    margin:0 1rem;
+    text-decoration: underline;
+}
+
+#programs a:hover{
+    color:black;
+}
+
+#update_info input{
+    margin-bottom:.5rem;
+}
+
+#update_info{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#update_info > div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#container button{
+    width:100%;
+}
+
+#quote_info{
+    width:70%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+textarea{
+    height:2.5rem;
+}
+
+#one_uploaded_quote{
+    border:.1rem solid black;
+    background-color: white;
+    padding:.5rem 2rem;
+    margin-bottom:1rem;
+}
+
+#one_uploaded_quote button:hover{
+    background-color: green;
+}
+
+
+#uploaded_quotes button, #liked_quotes button{
+    width:auto;
+}
+
+#delete_quote{
+    display: flex;
+    justify-content: center;
+    padding-top:1rem;
+}
+
+#delete_quote button{
+    background-color: black;
+}
+
+#delete_quote button:hover{
+    background-color: red;
+}
+
+#quote_info > div{
+    width:40%;
+}

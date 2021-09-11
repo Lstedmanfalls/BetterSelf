@@ -27,9 +27,10 @@ def quotes_wall(request): #GET REQUEST
         messages.error(request, "You must be logged in to view this site")
         return redirect ("/admin")
     else:
+        all_the_quotes = Quote.objects.all().order_by("-created_at")
         context = {
         "this_user": User.objects.get(id=request.session["user_id"]),
-        "all_the_quotes": Quote.objects.all(),
+        "all_the_quotes": all_the_quotes,
     }
     return render(request, "quotes_wall.html", context)
 

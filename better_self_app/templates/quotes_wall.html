@@ -32,19 +32,22 @@
         </nav>
         <div id="container">
             <h1>Dream. Act. Share. Inspire.</h1>
-            <div class ="block">
+            <div id="content" class="block">
                 <div id="quotes">
-                    {% for quote in all_the_quotes %}
-                    <p class="quote">"{{quote.quote}}"</p>
-                    <p class="author">- {{quote.author}}</p>
-                    <p class="added_by">Added by: {{quote.user_who_uploaded.display_name}}</p>
-                    </p>
-                    {% if this_user in quote.user_who_liked.all %}
+                {% for quote in all_the_quotes %}
+                    <div id="one_quote">
+                        <p class="quote">"{{quote.quote}}"</p>
+                        <p class="author">- {{quote.author}}</p>
+                        <p class="added_by">Added by {{quote.user_who_uploaded.display_name}} on {{quote.created_at.date}}</p>
+                        </p>
+                        {% if this_user in quote.user_who_liked.all %}
                         <form action="quotes/{{quote.id}}/unlike" method="POST">
                         {% csrf_token %}
                             <p>
                                 <button type="submit">Unlike</button>                        
+                                {% if quote.user_who_liked.count > 0 %}
                                 {{quote.user_who_liked.count}}
+                                {% endif %}
                             </p>
                         </form>
                         {% else %}
@@ -52,31 +55,37 @@
                         {% csrf_token %}
                             <p>
                                 <button type="submit">Like</button>
+                                {% if quote.user_who_liked.count > 0 %}
                                 {{quote.user_who_liked.count}}
+                                {% endif %}
                             </p>
                         </form>
                         {% endif %}
-                        {% endfor %}
+                    </div>
+                {% endfor %}
                 </div>
                 <div id="add_quote">
-                    <h2>Add a Quote</h2>
-                    <form action="/quotes/create_quote" method="POST">
-                    {% csrf_token %}
-                        <label for="quote">Quote <span id="no_quotes">(no quotation marks)</span></label>
-                        <textarea name="quote"></textarea>
-                        <label for="author">Quote Author</label>
-                        <input name="author" type="text">
-                        <button type="submit">Add Quote</button>
-                    </form>
-                    {% if messages %}
-                    {% for message in messages %}    
-                    <p class="messages">    
-                    {{ message }}   
-                    </p>
-                    {% endfor %}
-                    {% endif %}
+                    <div id="video">
+                        <iframe src="https://www.youtube.com/embed/HwLK9dBQn0g" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                <h2>Add a Quote</h2>
+                <form action="/quotes/create_quote" method="POST">
+                {% csrf_token %}
+                    <label for="quote">Quote <span id="no_quotes">(no quotation marks)</span></label>
+                    <textarea name="quote"></textarea>
+                    <label for="author">Quote Author</label>
+                    <input name="author" type="text">
+                    <button type="submit">Add Quote</button>
+                </form>
+                {% if messages %}
+                {% for message in messages %}    
+                <p class="messages">    
+                {{ message }}   
+                </p>
+                {% endfor %}
+                {% endif %}
                 </div>
-            </div>    
+            </div>
         </div>
     </div>
     <footer>
