@@ -1,5 +1,5 @@
 h2{
-    margin-bottom:1rem;
+    margin:1rem 0;
 }
 
 .block{
@@ -20,8 +20,8 @@ h2{
     align-items: center;
 }
 
-#program_links, #update_display_name, #update_password, #uploaded_quotes{
-    margin:.5rem 0 2.5rem 0;
+#program_links, #update_display_name, #update_password{
+    margin:.5rem 0 2rem 0;
 }
 
 #programs a{
@@ -59,7 +59,7 @@ h2{
 }
 
 #quote_info{
-    width:70%;
+    width:100%;
     display: flex;
     justify-content: space-evenly;
 }
@@ -84,7 +84,7 @@ textarea{
     border:.1rem solid black;
     background-color: white;
     padding:.5rem 2rem;
-    margin-bottom:1rem;
+    margin-bottom:1.5rem;
 }
 
 #one_uploaded_quote button:hover{
@@ -112,4 +112,32 @@ textarea{
 
 #quote_info > div{
     width:40%;
+}
+
+span{
+    font-weight: bold;
+    font-size:1.3rem;
+}
+
+#one_liked_quote{
+    border:.1rem solid black;
+    margin-bottom:1.5rem;
+    padding:.5rem;
+    background-color: white;
+}
+
+#one_liked_quote button{
+    background-color: black;
+    width:auto;
+    padding:.5rem;
+    margin-top:.7rem;
+}
+
+#one_liked_quote button:hover{
+    background-color: red;
+}
+
+#messages{
+    color:var(--maroon);
+    font-weight: bold;
 }
