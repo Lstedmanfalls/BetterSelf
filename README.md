@@ -6,3 +6,4 @@
 <h2>Page to begin new behavior change program</h2>
 <img src="project_screenshots/add_program_page.JPG">
 <h2>User account page</h2>
+<img src ="project_screenshots/user_account_page.JPG">
