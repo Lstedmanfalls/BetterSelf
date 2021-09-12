@@ -45,7 +45,7 @@
                     </div>
                     {% if programs.count > 0 %}
                     <div id="programs">
-                        <h2>My Programs</h2>
+                        <h2>View Your Programs</h2>
                         <div id="program_links">
                             {% for program in programs %}
                             <a href = "/program/{{program.id}}">{{program.behavior}}</a>
@@ -58,7 +58,7 @@
                             <h2>Change Display Name</h2>
                             <form action="/user/{{this_user.id}}/account/update_display_name" method="POST">
                             {% csrf_token %}
-                                <label for="display_name">New Display Name</label>
+                                <label for="display_name">New Name</label>
                                 <input name="display_name" type="text" value = "{{this_user.display_name}}">
                                 <button type="submit">Update Display Name</button>
                             </form>
@@ -67,7 +67,7 @@
                             <h2>Change Password</h2>
                             <form action="/user/{{this_user.id}}/account/update_password" method="POST">
                             {% csrf_token %}
-                                <label for="password">Password</label>
+                                <label for="password">New Password</label>
                                 <input name="password" type="password">
                                 <label for="password_confirm">Confirm Password</label>
                                 <input name="password_confirm" type="password">
@@ -79,7 +79,7 @@
                 <div id ="quote_info">
                     {% if this_user.quote_uploader.all.count > 0 %}
                     <div id="uploaded_quotes">
-                        <h2>My Quotes</h2>
+                        <h2>Quotes You Added</h2>
                         {% for quote in this_user.quote_uploader.all %}
                         <div id ="one_uploaded_quote">
                             <form action="/user/{{this_user.id}}/account/update_quote" method="POST">
@@ -104,7 +104,7 @@
                     {% endif %}
                     {% if this_user.quote_liker.all.count > 0 %}
                     <div id="liked_quotes">
-                        <h2>My Liked Quotes</h2>
+                        <h2>Quotes You Like</h2>
                         {% for quote in this_user.quote_liker.all %}
                         <p>Quote: {{quote.quote}}</p>
                         <p>Author: {{quote.author}}</p>

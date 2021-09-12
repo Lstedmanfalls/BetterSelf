@@ -2,8 +2,16 @@ h2{
     margin-bottom:1rem;
 }
 
+.block{
+    padding-top:0;
+}
+
+#user_info label{
+    text-align: center;
+}
+
 #user_info{
-    width:20%;
+    width:25%;
 }
 
 #programs{
@@ -22,7 +30,7 @@ h2{
     font-size:1.5rem;
     font-weight: bold;
     padding:0;
-    margin:0 1rem;
+    margin:0 .5rem;
     text-decoration: underline;
 }
 
@@ -56,8 +64,20 @@ h2{
     justify-content: space-evenly;
 }
 
+#quote_info label{
+    font-size:1.3rem;
+}
+
+#uploaded_quotes button, #liked_quotes button{
+    font-size:1rem;
+}
+
 textarea{
     height:2.5rem;
+}
+
+#uploaded_quotes input{
+    margin-bottom:1rem;
 }
 
 #one_uploaded_quote{
@@ -71,7 +91,6 @@ textarea{
     background-color: green;
 }
 
-
 #uploaded_quotes button, #liked_quotes button{
     width:auto;
 }
@@ -79,7 +98,8 @@ textarea{
 #delete_quote{
     display: flex;
     justify-content: center;
-    padding-top:1rem;
+    padding-top:.4rem;
+    margin-bottom:.5rem;
 }
 
 #delete_quote button{
