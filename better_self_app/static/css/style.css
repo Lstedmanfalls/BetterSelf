@@ -15,17 +15,17 @@ body{
 }
 
 #wrapper{
-    min-height:93.5vh;
+    min-height:85vh;
     background-color: var(--yellow);
 }
 
 #container{
     background-color: var(--yellow);
-    border-top: .1rem solid black;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-bottom:2rem;
+    margin-top:5rem;
 }
 
 .block{
@@ -38,6 +38,11 @@ body{
 nav{
     padding:1rem 8rem;
     background-color: white;
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    border-bottom: .1rem solid black;
 }
 
 nav, #logo, #nav_links{
