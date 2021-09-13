@@ -118,12 +118,14 @@ def view_program(request, program_id): #GET REQUEST
         "change_direction": change_direction,
         }
 
-    # If a baseline entry has been added, user can see table with baseline data 
     existing_baseline = this_program.baseline_program.all()
+    existing_intervention = this_program.intervention_program.all()
+
+    # If a baseline entry has been added, user can see table with baseline data    
     if len(existing_baseline) > 0:
         baseline = True
         context["baseline"] = baseline
-
+        
         # If at least 3 baseline entries have been added, user can see baseline average and goal
         if len(existing_baseline) >= 3:
             intervention_ready = True
@@ -144,10 +146,9 @@ def view_program(request, program_id): #GET REQUEST
             context["goal_statement"] = goal_statement
 
         # If an intervention entry has been added, user can see intervention data in the table
-        existing_intervention = this_program.intervention_program.all()
-        if len(existing_intervention) > 0:
-            intervention = True
-            context["intervention"] = intervention
+            if len(existing_intervention) > 0:
+                intervention = True
+                context["intervention"] = intervention
 
         # # If at least 7 intervention entries have been added, and goal has been met each time, user can generate a new goal
         # count = 0
@@ -212,6 +213,20 @@ def delete_intervention(request, program_id): #POST REQUEST
     if request.method == "POST":
         this_intervention.delete()        
     return redirect(f"/program/{program_id}")
+
+def view_baseline_note(request, baseline_id): #GET REQUEST
+    this_baseline = Baseline.objects.get(id = baseline_id)
+    context = {
+    "this_baseline":this_baseline
+    }
+    return render(request, "view_baseline_note.html", context)
+
+def view_intervention_note(request, intervention_id): #GET REQUEST
+    this_intervention = Intervention.objects.get(id = intervention_id)
+    context = {
+    "this_intervention":this_intervention
+    }
+    return render(request, "view_intervention_note.html", context)
 
 # --------- Specific user account page
 def account(request, user_id): #GET REQUEST
