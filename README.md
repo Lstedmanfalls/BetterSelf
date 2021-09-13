@@ -8,4 +8,4 @@
 <h2>User account page</h2>
 <img src="project_screenshots/user_account.JPG">
 <h2>Specific program page, before data have been added</h2>
-<img src="program_page_before_data.JPG">
+<img src="project_screenshots/program_page_before_data.JPG">
