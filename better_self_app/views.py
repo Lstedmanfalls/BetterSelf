@@ -40,7 +40,7 @@ def create_quote(request): #POST REQUEST
     if len(errors) > 0:
         for key, value in errors.items():
             messages.error(request, value)
-        return redirect("/qoutes")
+        return redirect("/quotes")
     elif request.method != "POST":
         return redirect("/quotes")
     elif request.method == "POST":
