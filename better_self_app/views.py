@@ -248,6 +248,14 @@ def account(request, user_id): #GET REQUEST
     }
     return render(request, "account.html", context)
 
+def delete_program(request, user_id): #POST REQUEST
+    this_program = Program.objects.get(id = request.POST["program_id"])
+    if request.method != "POST":
+        return redirect("/home")
+    if request.method == "POST":
+        this_program.delete()        
+    return redirect(f"/user/{user_id}/account")
+
 def update_display_name(request, user_id): #POST REQUEST
     this_user = User.objects.get(id = user_id)
     errors = User.objects.update_display_name_validator(request.POST, request.session)    

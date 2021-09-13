@@ -25,9 +25,10 @@ urlpatterns = [
     path('intervention_note/<int:intervention_id>', views.view_intervention_note), #GET request to view a specific baseline note
     # My Account Page
     path('user/<int:user_id>/account', views.account), #GET request to view specific account page
+    path('user/<int:user_id>/account/delete_program', views.delete_program), #POST request to delete a specific program
     path('user/<int:user_id>/account/update_password', views.update_password), #POST request to change password
     path('user/<int:user_id>/account/update_display_name', views.update_display_name), #POST request to change password
     path('user/<int:user_id>/account/update_quote', views.update_quote), #POST request to update a specific quote
-    path('user/<int:user_id>/account/delete_quote', views.delete_quote), #POST request to delete a specific object
+    path('user/<int:user_id>/account/delete_quote', views.delete_quote), #POST request to delete a specific quote
     path('user/<int:user_id>/account/unlike', views.account_unlike), #POST request to delete a like object from quote on account page
 ]

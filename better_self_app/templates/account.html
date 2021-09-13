@@ -45,12 +45,17 @@
                 <div id="user_info">
                     {% if programs.count > 0 %}
                     <div id="programs">
-                        <h2>View Your Programs</h2>
+                        <h2>View Your Program(s)</h2>
+                        {% for program in programs %}
                         <div id="program_links">
-                            {% for program in programs %}
                             <a href = "/program/{{program.id}}">{{program.behavior}}</a>
-                            {% endfor %}
+                            <form action="/user/{{this_user.id}}/account/delete_program" method="POST">
+                            {% csrf_token %}
+                                <input name="program_id" type="hidden" value="{{program.id}}">
+                                <button type="submit">Delete Program</button>
+                            </form>
                         </div>
+                        {% endfor %}
                     </div>
                     {% endif %}
                     <div id="update_info">

@@ -1,3 +1,7 @@
+#container{
+    padding-bottom:0;
+}
+
 h2{
     margin:1rem 0;
 }
@@ -20,14 +24,24 @@ h2{
     align-items: center;
 }
 
-#program_links, #update_display_name, #update_password{
-    margin:.5rem 0 2rem 0;
+#program_links{
+    display:flex;
+    align-items: center;
+    margin-bottom:.7rem;
+}
+
+#update_display_name, #update_password{
+    margin:.5rem 0 .5rem 0;
+}
+
+#update_display_name h2, #update_password h2{
+    margin-bottom:.5rem;
 }
 
 #programs a{
     background-color:var(--yellow);
     color:var(--maroon);
-    font-size:1.5rem;
+    font-size:1.8rem;
     font-weight: bold;
     padding:0;
     margin:0 .5rem;
@@ -36,6 +50,17 @@ h2{
 
 #programs a:hover{
     color:black;
+}
+
+#programs button{
+    font-size:.9rem;
+    padding:.3rem 0;
+    margin-left:2rem;
+    background-color: black;
+}
+
+#programs button:hover{
+    background-color: red;
 }
 
 #update_info input{
