@@ -9,3 +9,11 @@
 <img src="project_screenshots/user_account.JPG">
 <h2>Specific program page, before data have been added</h2>
 <img src="project_screenshots/program_page_before_data.JPG">
+<h2>Program page with less than 3 baseline entries</h2>
+<img src ="project_screenshots/program_page_less_than_three.JPG">
+<h2>Program page with 3 baseline entries </h2>
+<img src ="project_screenshots/program_page_three.JPG">
+<h2>Program page with intervention entries</h2>
+<img src="project_screenshots/program_page_intervention.JPG">
+<h2>Entry note (in new tab)</h2>
+<img src="project_screeshots/note.JPG">
