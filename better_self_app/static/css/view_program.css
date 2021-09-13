@@ -15,16 +15,16 @@
 #begin{
     display: flex;
     flex-direction: column;
-    width:65%;
+    width:48%;
     align-items: center;
 }
 
 #begin h2{
-    padding-bottom: 1rem;
+    padding-bottom: .5rem;
 }
 
 #begin h3{
-    padding-bottom: 2rem;
+    padding-bottom: 1rem;
     font-size:1.8rem;
     font-weight:normal;
 }
@@ -53,5 +53,5 @@ ul{
 }
 
 #add_data{
-    width:25%;
+    width:20%;
 }

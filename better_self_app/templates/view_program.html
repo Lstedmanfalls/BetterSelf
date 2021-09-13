@@ -36,7 +36,7 @@
             <p id="affirmation" class ="statement">I am going to {{change_direction}} my number of {{this_program.measurement.lower}} each day.</p>
             <p class="statement">{{this_program.reason}}</p>
             <div id="content" class="block">
-                {% if baseline != True %}
+                {% if intervention_ready != True %}
                 <div id="begin">
                     <h2>Congratulations, you've already taken the first step!</h2>
                     <h3>Now, let's track some data.</h3>
@@ -51,7 +51,7 @@
                         <li>Don't make changes yet, just do exactly what you would normally 
                             <ul>
                                 <li>
-                                    Your baseline is how much you do the behavior right now. Your goal will be calculated based on your baseline average, so make sure it's as normal as possible. If you make changes now, your goal will be too hard!
+                                    Your goal will be calculated from your baseline average. If you make changes now, intervention will be too hard!
                                 </li>
                             </ul>
                         </li>
@@ -65,20 +65,19 @@
                         <li>After at least 3 baseline entries, you'll see your goal
                             <ul>
                                 <li>
-                                    Your goal will be shown at the top of the page, and you can begin intervention.
+                                    Your baseline average and goal will be shown, and you can begin intervention.
                                 </li>
                             </ul>
                         </li>
                     </ol>
                 </div>
                 {% endif %}
-                {% if baseline == True %}
+                {% if intervention_ready == True %}
                 <div id="baseline_info">
                     <div id="baseline_average">
                         <h2>Baseline Average</h2>
                         <p>{{baseline_avg_statement}}</p>
                     </div>
-                    {% if intervention_ready == True %}
                     <div id="goal">
                         <h2>Intervention Goal</h2>
                         <p>{{goal_statement}}</p>
@@ -90,7 +89,6 @@
                         {% endif %} -->
                         <!-- </form> -->
                     </div>
-                    {% endif %}
                 </div>
                 {% endif %}
                 <div id = "add_data">
@@ -195,6 +193,9 @@
                         </table>
                     </div>
                 </div>
+                {% endif %}
+                {% if baseline != True %}
+                <div id="blank"></div>
                 {% endif %}
             </div>
         </div>

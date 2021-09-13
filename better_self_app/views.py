@@ -118,20 +118,19 @@ def view_program(request, program_id): #GET REQUEST
         "change_direction": change_direction,
         }
 
-    # If a baseline entry has been added, context includes the baseline average and goal, and related statements 
+    # If a baseline entry has been added, user can see table with baseline data 
     existing_baseline = this_program.baseline_program.all()
     if len(existing_baseline) > 0:
         baseline = True
-        baseline_avg = int(this_program.baseline_program.aggregate(Avg('total'))["total__avg"])
-        baseline_avg_statement = f"{baseline_avg} {this_program.measurement.lower()} each day"
         context["baseline"] = baseline
-        context["baseline_avg"] = baseline_avg
-        context["baseline_avg_statement"] = baseline_avg_statement
 
-        # If at least 3 baseline entries have been added, user can begin entering intervention data
+        # If at least 3 baseline entries have been added, user can see baseline average and goal
         if len(existing_baseline) >= 3:
             intervention_ready = True
+
             # Goal is set as 10% more or less than the baseline average, depending on desired change direction
+            baseline_avg = int(this_program.baseline_program.aggregate(Avg('total'))["total__avg"])
+            baseline_avg_statement = f"{baseline_avg} {this_program.measurement.lower()} each day"
             if this_program.direction == 0:
                 goal = int(baseline_avg - (baseline_avg * .1))
                 goal_statement = f"No more than {goal} {this_program.measurement.lower()} per day"
@@ -139,10 +138,12 @@ def view_program(request, program_id): #GET REQUEST
                 goal = int(baseline_avg + (baseline_avg * .1))
                 goal_statement = f"At least {goal} {this_program.measurement.lower()} per day"
             context["intervention_ready"] = intervention_ready
+            context["baseline_avg"] = baseline_avg
+            context["baseline_avg_statement"] = baseline_avg_statement
             context["goal"] = goal
             context["goal_statement"] = goal_statement
 
-        # If an intervention entry has been added, the intervention data shows in the table
+        # If an intervention entry has been added, user can see intervention data in the table
         existing_intervention = this_program.intervention_program.all()
         if len(existing_intervention) > 0:
             intervention = True
@@ -214,6 +215,11 @@ def delete_intervention(request, program_id): #POST REQUEST
 
 # --------- Specific user account page
 def account(request, user_id): #GET REQUEST
+        # User must be logged in
+    if "user_id" not in request.session:
+        messages.error(request, "You must be logged in to view this site")
+        return redirect ("/admin")
+    
     this_user = User.objects.get(id = request.session["user_id"])
 
     # User cannot view another person's account page
