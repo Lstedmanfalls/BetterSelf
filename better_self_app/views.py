@@ -124,25 +124,23 @@ def view_program(request, program_id): #GET REQUEST
         baseline = True
         baseline_avg = int(this_program.baseline_program.aggregate(Avg('total'))["total__avg"])
         baseline_avg_statement = f"{baseline_avg} {this_program.measurement.lower()} each day"
-
-        # Goal is set as 10% more or less than the baseline average, depending on desired change direction
-        if this_program.direction == 0:
-            goal = int(baseline_avg - (baseline_avg * .1))
-            goal_statement = f"No more than {goal} {this_program.measurement.lower()} per day"
-        else:
-            goal = int(baseline_avg + (baseline_avg * .1))
-            goal_statement = f"At least {goal} {this_program.measurement.lower()} per day"
-
         context["baseline"] = baseline
         context["baseline_avg"] = baseline_avg
         context["baseline_avg_statement"] = baseline_avg_statement
-        context["goal"] = goal
-        context["goal_statement"] = goal_statement
 
         # If at least 3 baseline entries have been added, user can begin entering intervention data
         if len(existing_baseline) >= 3:
             intervention_ready = True
+            # Goal is set as 10% more or less than the baseline average, depending on desired change direction
+            if this_program.direction == 0:
+                goal = int(baseline_avg - (baseline_avg * .1))
+                goal_statement = f"No more than {goal} {this_program.measurement.lower()} per day"
+            else:
+                goal = int(baseline_avg + (baseline_avg * .1))
+                goal_statement = f"At least {goal} {this_program.measurement.lower()} per day"
             context["intervention_ready"] = intervention_ready
+            context["goal"] = goal
+            context["goal_statement"] = goal_statement
 
         # If an intervention entry has been added, the intervention data shows in the table
         existing_intervention = this_program.intervention_program.all()

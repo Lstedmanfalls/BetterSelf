@@ -1,0 +1,57 @@
+#container{
+    padding-bottom:0;
+}
+
+#affirmation{
+    padding-top:.5rem;
+}
+
+.statement{
+    color:green;
+    font-weight: bold;
+    font-size:1.4rem;
+}
+
+#begin{
+    display: flex;
+    flex-direction: column;
+    width:65%;
+    align-items: center;
+}
+
+#begin h2{
+    padding-bottom: 1rem;
+}
+
+#begin h3{
+    padding-bottom: 2rem;
+    font-size:1.8rem;
+    font-weight:normal;
+}
+
+#begin ol{
+    padding-left:2rem;
+    background-color: white;
+    border:.1rem solid black;
+    padding:1rem 3rem;
+}
+
+#begin ol > li{
+    font-size: 1.4rem;
+    padding-bottom: 1rem;
+    font-weight: bold;
+}
+
+ul{
+    list-style-type: none;
+    padding-top:.5rem;
+}
+
+#begin ul > li{
+    font-size:1.1rem;
+    font-weight: normal;
+}
+
+#add_data{
+    width:25%;
+}
