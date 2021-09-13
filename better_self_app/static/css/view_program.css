@@ -152,3 +152,16 @@ span{
 #no{
     color:var(--maroon);
 }
+
+#baseline_info p{
+    text-align:center;
+}
+
+#baseline_info > p{
+    font-style: italic;
+    font-size:1.5rem;
+}
+
+#baseline_info > p{
+    padding-bottom:3rem;
+}
