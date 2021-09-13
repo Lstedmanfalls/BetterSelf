@@ -16,4 +16,4 @@
 <h2>Program page with intervention entries</h2>
 <img src="project_screenshots/program_page_intervention.JPG">
 <h2>Entry note (in new tab)</h2>
-<img src="project_screeshots/note.JPG">
+<img src="project_screenshots/note.JPG">
