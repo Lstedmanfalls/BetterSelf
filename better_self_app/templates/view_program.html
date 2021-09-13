@@ -98,7 +98,9 @@
                 {% endif %}
                 {% if intervention_ready == True %}
                 <div id="baseline_info">
+                    {% if intervention != True %}
                     <p>You are ready for intervention!</p>
+                    {% endif %}
                     <div id="goal">
                         <h2>Intervention Goal</h2>
                         <p>{{goal_statement}}</p>
