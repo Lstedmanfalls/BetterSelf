@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BetterSelf</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/css/style.css' %}">
+    <link rel="stylesheet" href="{% static '/css/account.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">    
+</head>
+<body>
+    <div id="wrapper">
+        <nav>
+            <div id="logo">
+                <img src="/static/img/logo_maroon.jpg" alt="clapping hands logo">
+                <p>BetterSelf</p>
+                <p>Become a better version of yourself, one day at a time.</p>
+            </div>
+            <div id="nav_links">
+                <a href = "/home">Home</a>
+                <a href = "/quotes">Get Motivated</a>
+                <a href = "/program">Start Program</a>
+                <a href="/user/{{this_user.id}}/account">My Account</a>
+                <a href="/admin/logout">Logout</a>
+            </div>
+        </nav>
+        <div id ="container">
+        <h1>Welcome {{this_user.first_name}}!</h1>
+        <div id ="messages">
+            {% if messages %}
+            {% for message in messages %}    
+            <p class="messages">    
+            * {{ message }} * 
+            </p>
+            {% endfor %}
+            {% endif %}
+        </div>
+            <div class="block">
+                <div id="user_info">
+                    {% if programs.count > 0 %}
+                    <div id="programs">
+                        <h2>View Your Program(s)</h2>
+                        {% for program in programs %}
+                        <div id="program_links">
+                            <a href = "/program/{{program.id}}">{{program.behavior}}</a>
+                            <form action="/user/{{this_user.id}}/account/delete_program" method="POST">
+                            {% csrf_token %}
+                                <input name="program_id" type="hidden" value="{{program.id}}">
+                                <button type="submit">Delete Program</button>
+                            </form>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <div id="update_info">
+                        <div id="update_display_name">
+                            <h2>Change Display Name</h2>
+                            <form action="/user/{{this_user.id}}/account/update_display_name" method="POST">
+                            {% csrf_token %}
+                                <label for="display_name">New Name</label>
+                                <input name="display_name" type="text" value = "{{this_user.display_name}}">
+                                <button type="submit">Update Display Name</button>
+                            </form>
+                        </div>
+                        <div id="update_password">
+                            <h2>Change Password</h2>
+                            <form action="/user/{{this_user.id}}/account/update_password" method="POST">
+                            {% csrf_token %}
+                                <label for="password">New Password</label>
+                                <input name="password" type="password">
+                                <label for="password_confirm">Confirm Password</label>
+                                <input name="password_confirm" type="password">
+                                <button type="submit">Change Password</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div id ="quote_info">
+                    {% if this_user.quote_uploader.all.count > 0 %}
+                    <div id="uploaded_quotes">
+                        <h2>Quotes You Added</h2>
+                        {% for quote in this_user.quote_uploader.all %}
+                        <div id ="one_uploaded_quote">
+                            <form action="/user/{{this_user.id}}/account/update_quote" method="POST">
+                            {% csrf_token %}
+                                <input name="quote_id" type="hidden" value="{{quote.id}}">
+                                <label for="quote">Quote</label>
+                                <textarea name="quote">{{quote.quote}}</textarea>
+                                <label for="author">Author</label>
+                                <input name="author" type="text" value="{{quote.author}}">
+                                <button type="submit">Update Quote</button>
+                            </form>
+                            <div id="delete_quote">
+                                <form action="/user/{{this_user.id}}/account/delete_quote" method="POST">
+                                {% csrf_token %}
+                                    <input name="quote_id" type="hidden" value="{{quote.id}}">
+                                    <button type="submit">Delete Quote</button>
+                                </form>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% if this_user.quote_liker.all.count > 0 %}
+                    <div id="liked_quotes">
+                        <h2>Quotes You Like</h2>
+                        {% for quote in this_user.quote_liker.all %}
+                        <div id="one_liked_quote">
+                            <p><span>Quote: </span>{{quote.quote}}</p>
+                            <p><span>Author: </span>{{quote.author}}</p>
+                            <p><span>Added by: </span>{{quote.user_who_uploaded.display_name}}</p>
+                            <form action="/user/{{this_user.id}}/account/unlike" method="POST">
+                                {% csrf_token %}
+                                <input name = "quote_id" type ="hidden" value="{{quote.id}}">
+                                <button type="submit">Unlike</button>
+                            </form>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>&#169; 2021 BetterSelf, Inc.</p>
+        <p><a href="https://www.freshbooks.com/blog/does-my-website-really-need-a-terms-and-conditions-page" target="_blank">Terms of Service</a> | <a href="https://www.privacypolicies.com/blog/privacy-policies-legally-required/" target="_blank">Privacy Policy</a></p>
+    </footer>
+</body>
+</html>

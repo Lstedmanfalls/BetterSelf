@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BetterSelf</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/css/style.css' %}">
+    <link rel="stylesheet" href="{% static '/css/landing_page.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">    
+</head>
+<body>
+    <div id="wrapper">
+        <nav>
+            <div id="logo">
+                <img src="/static/img/logo_maroon.jpg" alt="clapping hands logo">
+                <p>BetterSelf</p>
+                <p>Become a better version of yourself, one day at a time.</p>
+            </div>
+            <div id="nav_links">
+                <a href = "/home">Home</a>
+                <a href = "/quotes">Get Motivated</a>
+                <a href = "/program">Start Program</a>
+                <a href="/user/{{this_user.id}}/account">My Account</a>
+                <a href="/admin/logout">Logout</a>
+            </div>
+        </nav>
+        <div id="container">
+            <h1>Say hello to your better self.</h1>
+            <div class="block">
+                <div class ="blurb">
+                    <h2>Be the YOU that you wish to see in the world!</h2>
+                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Hic, cumque nihil odio quibusdam illo minus provident reiciendis ad. Nisi, beatae aspernatur! Molestias, unde assumenda unde cum reprehenderit unde doloremque accusamus accusant mollitia! Molestias, assumenda reprehenderit unde minus doloremque accusamus accusant mollitia unde doloremque!</p>
+                    <a href ="/quotes">Get Motivated</a>
+                </div>
+                <img src="/static/img/celebrate_sunflowers.jpg" alt ="woman celebrating in a field of sunflowers">
+            </div>
+            <div id="blurb_two" class="block">
+                <img src="/static/img/woman.jpg" alt ="woman celebrating in a field of sunflowers">
+                <div class ="blurb">
+                    <h2>Let today be the day you remember forever.</h2>
+                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Hic, cumque nihil odio quibusdam illo minus provident reiciendis ad. Nisi, beatae aspernatur! Molestias, unde assumenda unde cum reprehenderit unde doloremque accusamus accusant mollitia! Molestias, assumenda reprehenderit unde minus doloremque accusamus accusant mollitia unde doloremque!</p>
+                    <a href ="/program">Start Program</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>&#169; 2021 BetterSelf, Inc.</p>
+        <p><a href="https://www.freshbooks.com/blog/does-my-website-really-need-a-terms-and-conditions-page" target="_blank">Terms of Service</a> | <a href="https://www.privacypolicies.com/blog/privacy-policies-legally-required/" target="_blank">Privacy Policy</a></p>
+    </footer>
+</body>
+</html>
