@@ -1,6 +1,6 @@
 <h1> BetterSelf Web Application</h1>
 <h2>Landing page and Login</h2>
-<img src="demo/login.gif">
+<img src="demo/login_registration.gif">
 <h2>Motivation wall for logged-in users to add, view, and like quotes</h2>
 <img src="demo/motivation_wall.gif">
 <h2>Create and implement new behavior change program</h2>
