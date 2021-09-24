@@ -9,8 +9,8 @@ urlpatterns = [
     # Motivational Quotes Page
     path("quotes", views.quotes_wall), #GET request to display quotes wall
     path('quotes/create_quote', views.create_quote), #POST request to create quote object
-    path('quotes/<int:quote_id>/like', views.like), #POST request to create like object
-    path('quotes/<int:quote_id>/unlike', views.unlike), #POST request to delete like object
+    path('quotes/like', views.like), #POST request to create like object
+    path('quotes/unlike', views.unlike), #POST request to delete like object
     # Start Program Page
     path('program', views.new_program), #GET request to display program creation page
     path('program/create_program', views.create_program), #POST request to create program

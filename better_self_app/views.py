@@ -49,18 +49,18 @@ def create_quote(request): #POST REQUEST
         messages.success(request, "Quote added")
     return redirect("/quotes")
 
-def like(request, quote_id): #POST REQUEST
+def like(request): #POST REQUEST
     this_user = User.objects.get(id = request.session["user_id"])
-    this_quote = Quote.objects.get(id = quote_id)
+    this_quote = Quote.objects.get(id = request.POST["quote_id"])
     if request.method != "POST":
         return redirect("/quotes")
     if request.method == "POST":
         this_user.quote_liker.add(this_quote)
         return redirect("/quotes")
 
-def unlike(request, quote_id): #POST REQUEST
+def unlike(request): #POST REQUEST
     this_user = User.objects.get(id = request.session["user_id"])
-    this_quote = Quote.objects.get(id = quote_id)
+    this_quote = Quote.objects.get(id = request.POST["quote_id"])
     if request.method != "POST":
         return redirect("/quotes")
     if request.method == "POST":
@@ -234,7 +234,6 @@ def account(request, user_id): #GET REQUEST
     if "user_id" not in request.session:
         messages.error(request, "You must be logged in to view this site")
         return redirect ("/admin")
-    
     this_user = User.objects.get(id = request.session["user_id"])
 
     # User cannot view another person's account page
