@@ -179,7 +179,6 @@ def view_program(request, program_id): #GET REQUEST
     return render(request, "view_program.html", context)
 
 def create_baseline(request, program_id): #POST REQUEST
-    # Need to add validation in here to not let them do another entry for the same day
     this_user = User.objects.get(id=request.session["user_id"])
     this_program = Program.objects.get(id = program_id)
     errors = Baseline.objects.create_baseline_validator(request.POST)
@@ -194,7 +193,6 @@ def create_baseline(request, program_id): #POST REQUEST
     return redirect(f"/program/{program_id}")
     
 def create_intervention(request, program_id): #POST REQUEST
-    # Need to add validation in here to not let them do another entry for the same day
     this_user = User.objects.get(id=request.session["user_id"])
     this_program = Program.objects.get(id = program_id)
     errors = Intervention.objects.create_intervention_validator(request.POST)
@@ -253,7 +251,6 @@ def account(request): #GET REQUEST
     return render(request, "account.html", context)
 
 def delete_program(request): #POST REQUEST
-    this_user = User.objects.get(id = request.session["user_id"])
     this_program = Program.objects.get(id = request.POST["program_id"])
     if request.method != "POST":
         return redirect("/home")
