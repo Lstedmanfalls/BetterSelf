@@ -1,3 +1,5 @@
+// Quotes Page
+
 $(document).on("submit",".like", function(e){
     e.preventDefault();
     $.ajax({
@@ -11,6 +13,20 @@ $(document).on("submit",".like", function(e){
 })
 
 $(document).on("submit",".unlike", function(e){
+    e.preventDefault();
+    $.ajax({
+        url: "quotes/unlike",
+        type: "POST",
+        data: $(this).serialize(),
+        success: function(serverResponse){
+            $("#quotes").html(serverResponse);
+        }
+    })
+})
+
+// Account Page
+
+$(document).on("submit",".unlike_account", function(e){
     e.preventDefault();
     $.ajax({
         url: "quotes/unlike",

@@ -26,7 +26,7 @@
                 <a href = "/home">Home</a>
                 <a href = "/quotes">Get Motivated</a>
                 <a href = "/program">Start Program</a>
-                <a href="/user/{{this_user.id}}/account">My Account</a>
+                <a href="/account">My Account</a>
                 <a href="/admin/logout">Logout</a>
             </div>
         </nav>
@@ -49,7 +49,7 @@
                         {% for program in programs %}
                         <div id="program_links">
                             <a href = "/program/{{program.id}}">{{program.behavior}}</a>
-                            <form action="/user/{{this_user.id}}/account/delete_program" method="POST">
+                            <form action="/account/delete_program" method="POST">
                             {% csrf_token %}
                                 <input name="program_id" type="hidden" value="{{program.id}}">
                                 <button type="submit">Delete Program</button>
@@ -61,7 +61,7 @@
                     <div id="update_info">
                         <div id="update_display_name">
                             <h2>Change Display Name</h2>
-                            <form action="/user/{{this_user.id}}/account/update_display_name" method="POST">
+                            <form action="/account/update_display_name" method="POST">
                             {% csrf_token %}
                                 <label for="display_name">New Name</label>
                                 <input name="display_name" type="text" value = "{{this_user.display_name}}">
@@ -70,7 +70,7 @@
                         </div>
                         <div id="update_password">
                             <h2>Change Password</h2>
-                            <form action="/user/{{this_user.id}}/account/update_password" method="POST">
+                            <form action="/account/update_password" method="POST">
                             {% csrf_token %}
                                 <label for="password">New Password</label>
                                 <input name="password" type="password">
@@ -87,7 +87,7 @@
                         <h2>Quotes You Added</h2>
                         {% for quote in this_user.quote_uploader.all|dictsortreversed:"created_at" %} 
                         <div id ="one_uploaded_quote">
-                            <form action="/user/{{this_user.id}}/account/update_quote" method="POST">
+                            <form action="/account/update_quote" method="POST">
                             {% csrf_token %}
                                 <input name="quote_id" type="hidden" value="{{quote.id}}">
                                 <label for="quote">Quote</label>
@@ -97,7 +97,7 @@
                                 <button type="submit">Update Quote</button>
                             </form>
                             <div id="delete_quote">
-                                <form action="/user/{{this_user.id}}/account/delete_quote" method="POST">
+                                <form action="/account/delete_quote" method="POST">
                                 {% csrf_token %}
                                     <input name="quote_id" type="hidden" value="{{quote.id}}">
                                     <button type="submit">Delete Quote</button>
@@ -115,7 +115,7 @@
                             <p><span>Quote: </span>{{quote.quote}}</p>
                             <p><span>Author: </span>{{quote.author}}</p>
                             <p><span>Added by: </span>{{quote.user_who_uploaded.display_name}}</p>
-                            <form action="/user/{{this_user.id}}/account/unlike" method="POST">
+                            <form action="/account/unlike" method="POST">
                                 {% csrf_token %}
                                 <input name = "quote_id" type ="hidden" value="{{quote.id}}">
                                 <button type="submit">Unlike</button>

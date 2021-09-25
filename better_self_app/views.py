@@ -239,17 +239,12 @@ def view_intervention_note(request, intervention_id): #GET REQUEST
     return render(request, "view_intervention_note.html", context)
 
 # --------- Specific user account page
-def account(request, user_id): #GET REQUEST
+def account(request): #GET REQUEST
         # User must be logged in
     if "user_id" not in request.session:
         messages.error(request, "You must be logged in to view this site")
         return redirect ("/admin")
     this_user = User.objects.get(id = request.session["user_id"])
-
-    # User cannot view another person's account page
-    if this_user.id != user_id:
-        return redirect ("/home")
-        
     programs = this_user.program_user.all()
     context = {
         "this_user": this_user,
@@ -257,61 +252,62 @@ def account(request, user_id): #GET REQUEST
     }
     return render(request, "account.html", context)
 
-def delete_program(request, user_id): #POST REQUEST
+def delete_program(request): #POST REQUEST
+    this_user = User.objects.get(id = request.session["user_id"])
     this_program = Program.objects.get(id = request.POST["program_id"])
     if request.method != "POST":
         return redirect("/home")
     if request.method == "POST":
         this_program.delete()        
-    return redirect(f"/user/{user_id}/account")
+    return redirect("/account")
 
-def update_display_name(request, user_id): #POST REQUEST
-    this_user = User.objects.get(id = user_id)
+def update_display_name(request): #POST REQUEST
+    this_user = User.objects.get(id = request.session["user_id"])
     errors = User.objects.update_display_name_validator(request.POST, request.session)    
     if request.POST['display_name'] == this_user.display_name:
             messages.success(request, "No changes made")
-            return redirect(f"/user/{user_id}/account")
+            return redirect("/account")
     if len(errors) > 0:
         for key, value in errors.items():
             messages.error(request, value)
-        return redirect(f"/user/{user_id}/account")
+        return redirect("/account")
     elif request.method != "POST":
         return redirect("/home")
     elif request.method == "POST":
-        this_user = User.objects.get(id = user_id)
         display_name = request.POST['display_name']
         this_user.display_name = display_name
         this_user.save()
         messages.success(request, "Display name updated")
-    return redirect(f"/user/{user_id}/account")
+    return redirect("/account")
 
-def update_password(request, user_id): #POST REQUEST
+def update_password(request): #POST REQUEST
+    this_user = User.objects.get(id = request.session["user_id"])
     errors = User.objects.update_password_validator(request.POST)
     if len(errors) > 0:
         for key, value in errors.items():
             messages.error(request, value)
-        return redirect(f"/user/{user_id}/account")
+        return redirect("/account")
     elif request.method != "POST":
         return redirect("/home")
     elif request.method == "POST":
-        this_user = User.objects.get(id = user_id)
         password = request.POST['password']
         pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
         this_user.password = pw_hash
         this_user.save()
         messages.success(request, "Password updated")
-    return redirect(f"/user/{user_id}/account")
+    return redirect("/account")
 
-def update_quote(request, user_id): #POST REQUEST
+def update_quote(request): #POST REQUEST
+    this_user = User.objects.get(id = request.session["user_id"])
     this_quote = Quote.objects.get(id = request.POST["quote_id"])
     errors = Quote.objects.update_quote_validator(request.POST)
     if request.POST['quote'] == this_quote.quote and request.POST['author'] == this_quote.author:
             messages.success(request, "No changes made")
-            return redirect(f"/user/{user_id}/account")
+            return redirect("/account")
     elif len(errors) > 0:
         for key, value in errors.items():
             messages.error(request, value)
-        return redirect(f"/user/{user_id}/account")
+        return redirect("/account")
     elif request.method != "POST":
         return redirect("/home")
     elif request.method == "POST":
@@ -320,21 +316,22 @@ def update_quote(request, user_id): #POST REQUEST
         this_quote.author = request.POST["author"]
         this_quote.save()
         messages.success(request, "Quote updated")
-    return redirect(f"/user/{user_id}/account")
+    return redirect("/account")
 
-def delete_quote(request, user_id): #POST REQUEST
+def delete_quote(request): #POST REQUEST
+    this_user = User.objects.get(id = request.session["user_id"])
     this_quote = Quote.objects.get(id = request.POST["quote_id"])
     if request.method != "POST":
         return redirect("/home")
     if request.method == "POST":
         this_quote.delete()        
-    return redirect(f"/user/{user_id}/account")
+    return redirect("/account")
 
-def account_unlike(request, user_id): #POST REQUEST (unlike quote from own account page)
+def account_unlike(request): #POST REQUEST (unlike quote from own account page)
     this_user = User.objects.get(id = request.session["user_id"])
     this_quote = Quote.objects.get(id = request.POST["quote_id"])
     if request.method != "POST":
-        return redirect(f"/user/{user_id}/account")
+        return redirect("/account")
     if request.method == "POST":
         this_user.quote_liker.remove(this_quote)
-    return redirect(f"/user/{user_id}/account")
+    return redirect("/account")
