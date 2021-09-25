@@ -50,13 +50,13 @@ def create_quote(request): #POST REQUEST
     return redirect("/quotes")
 
 def like(request): #POST REQUEST
-    this_user = User.objects.get(id = request.session["user_id"])
-    this_quote = Quote.objects.get(id = request.POST["quote_id"])
     if request.method != "POST":
         return redirect("/quotes")
     if request.method == "POST":
+        this_user = User.objects.get(id = request.session["user_id"])
+        this_quote = Quote.objects.get(id = request.POST["quote_id"])
         this_user.quote_liker.add(this_quote)
-        return redirect("/quotes")
+    return render(request, "quotes_wall.html")
 
 def unlike(request): #POST REQUEST
     this_user = User.objects.get(id = request.session["user_id"])
