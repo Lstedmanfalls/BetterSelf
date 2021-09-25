@@ -248,7 +248,7 @@ def account(request): #GET REQUEST
     programs = this_user.program_user.all()
     context = {
         "this_user": this_user,
-        "programs": programs
+        "programs": programs,
     }
     return render(request, "account.html", context)
 
@@ -298,7 +298,6 @@ def update_password(request): #POST REQUEST
     return redirect("/account")
 
 def update_quote(request): #POST REQUEST
-    this_user = User.objects.get(id = request.session["user_id"])
     this_quote = Quote.objects.get(id = request.POST["quote_id"])
     errors = Quote.objects.update_quote_validator(request.POST)
     if request.POST['quote'] == this_quote.quote and request.POST['author'] == this_quote.author:
@@ -319,7 +318,6 @@ def update_quote(request): #POST REQUEST
     return redirect("/account")
 
 def delete_quote(request): #POST REQUEST
-    this_user = User.objects.get(id = request.session["user_id"])
     this_quote = Quote.objects.get(id = request.POST["quote_id"])
     if request.method != "POST":
         return redirect("/home")
@@ -327,11 +325,16 @@ def delete_quote(request): #POST REQUEST
         this_quote.delete()        
     return redirect("/account")
 
-def account_unlike(request): #POST REQUEST (unlike quote from own account page)
+def account_unlike(request): #POST REQUEST
     this_user = User.objects.get(id = request.session["user_id"])
     this_quote = Quote.objects.get(id = request.POST["quote_id"])
+    programs = this_user.program_user.all()
     if request.method != "POST":
         return redirect("/account")
     if request.method == "POST":
         this_user.quote_liker.remove(this_quote)
-    return redirect("/account")
+        context = {
+            "this_user": this_user,
+            "programs": programs,
+        }
+        return render(request, "unlike_form_account_snippet.html", context)

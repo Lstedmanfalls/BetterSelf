@@ -25,15 +25,14 @@ $(document).on("submit",".unlike", function(e){
 })
 
 // Account Page
-
 $(document).on("submit",".unlike_account", function(e){
     e.preventDefault();
     $.ajax({
-        url: "quotes/unlike",
+        url: "account/unlike",
         type: "POST",
         data: $(this).serialize(),
         success: function(serverResponse){
-            $("#quotes").html(serverResponse);
+            $("#quote_info").html(serverResponse);
         }
     })
 })

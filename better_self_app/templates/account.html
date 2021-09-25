@@ -12,7 +12,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">    
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="{% static '/script.js' %}" async></script>     
 </head>
 <body>
     <div id="wrapper">
@@ -115,7 +117,7 @@
                             <p><span>Quote: </span>{{quote.quote}}</p>
                             <p><span>Author: </span>{{quote.author}}</p>
                             <p><span>Added by: </span>{{quote.user_who_uploaded.display_name}}</p>
-                            <form action="/account/unlike" method="POST">
+                            <form class="unlike_account" method="POST">
                                 {% csrf_token %}
                                 <input name = "quote_id" type ="hidden" value="{{quote.id}}">
                                 <button type="submit">Unlike</button>
