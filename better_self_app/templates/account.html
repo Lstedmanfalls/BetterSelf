@@ -85,7 +85,7 @@
                     {% if this_user.quote_uploader.all.count > 0 %}
                     <div id="uploaded_quotes">
                         <h2>Quotes You Added</h2>
-                        {% for quote in this_user.quote_uploader.all %}
+                        {% for quote in this_user.quote_uploader.all|dictsortreversed:"created_at" %} 
                         <div id ="one_uploaded_quote">
                             <form action="/user/{{this_user.id}}/account/update_quote" method="POST">
                             {% csrf_token %}
