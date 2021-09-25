@@ -43,21 +43,21 @@
                         <p class="added_by">Added by {{quote.user_who_uploaded.display_name}} on {{quote.created_at.date}}</p>
                         </p>
                         {% if this_user in quote.user_who_liked.all %}
-                        <form action="quotes/unlike" method="POST">
+                        <form class="unlike" method="POST">
                         {% csrf_token %}
                             <p>
                                 <input name="quote_id" type="hidden" value={{quote.id}}>
-                                <button type="submit">Unlike</button>                        
+                                <button class="unlike_button" type="submit">Unlike</button>                        
                                 {% if quote.user_who_liked.count > 0 %}
                                 {{quote.user_who_liked.count}}
                                 {% endif %}
                             </p>
                         </form>
                         {% else %}
-                        <form class="like" action="quotes/like" method="POST">
+                        <form class="like" method="POST">
                         {% csrf_token %}
                             <p>
-                                <input class ="liked" name="quote_id" type="hidden" value={{quote.id}}>
+                                <input name="quote_id" type="hidden" value={{quote.id}}>
                                 <button type="submit">Like</button>
                                 {% if quote.user_who_liked.count > 0 %}
                                 {{quote.user_who_liked.count}}

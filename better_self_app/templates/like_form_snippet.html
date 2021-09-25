@@ -1,0 +1,31 @@
+{% for quote in all_the_quotes %}
+<div id="one_quote">
+    <p class="quote">"{{quote.quote}}"</p>
+    <p class="author">- {{quote.author}}</p>
+    <p class="added_by">Added by {{quote.user_who_uploaded.display_name}} on {{quote.created_at.date}}</p>
+    </p>
+    {% if this_user in quote.user_who_liked.all %}
+    <form class="unlike" method="POST">
+    {% csrf_token %}
+        <p>
+            <input name="quote_id" type="hidden" value={{quote.id}}>
+            <button class="unlike_button" type="submit">Unlike</button>                        
+            {% if quote.user_who_liked.count > 0 %}
+            {{quote.user_who_liked.count}}
+            {% endif %}
+        </p>
+    </form>
+    {% else %}
+    <form class="like" method="POST">
+    {% csrf_token %}
+        <p>
+            <input name="quote_id" type="hidden" value={{quote.id}}>
+            <button type="submit">Like</button>
+            {% if quote.user_who_liked.count > 0 %}
+            {{quote.user_who_liked.count}}
+            {% endif %}
+        </p>
+    </form>
+    {% endif %}
+</div>
+{% endfor %}

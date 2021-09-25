@@ -48,11 +48,16 @@
 #one_quote button{
     padding:0.2rem .5rem;
     margin-right:.3rem;
-    background-color: green ;
-    color:white;
+    background-color: white ;
+    color:black;
     box-shadow: var(--shadow);
     width:auto;
     font-size:.9rem;
+}
+
+.unlike_button{
+    background-color:green!important;
+    color: white!important;
 }
 
 #one_quote button:hover{

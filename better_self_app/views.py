@@ -56,16 +56,26 @@ def like(request): #POST REQUEST
         this_user = User.objects.get(id = request.session["user_id"])
         this_quote = Quote.objects.get(id = request.POST["quote_id"])
         this_user.quote_liker.add(this_quote)
-    return render(request, "quotes_wall.html")
+        all_the_quotes = Quote.objects.all().order_by("-created_at")
+        context = {
+            "this_user": User.objects.get(id=request.session["user_id"]),
+            "all_the_quotes": all_the_quotes,
+        }
+        return render(request, "like_form_snippet.html", context)
 
 def unlike(request): #POST REQUEST
-    this_user = User.objects.get(id = request.session["user_id"])
-    this_quote = Quote.objects.get(id = request.POST["quote_id"])
     if request.method != "POST":
         return redirect("/quotes")
     if request.method == "POST":
+        this_user = User.objects.get(id = request.session["user_id"])
+        this_quote = Quote.objects.get(id = request.POST["quote_id"])
         this_user.quote_liker.remove(this_quote)
-    return redirect("/quotes")
+        all_the_quotes = Quote.objects.all().order_by("-created_at")
+        context = {
+            "this_user": User.objects.get(id=request.session["user_id"]),
+            "all_the_quotes": all_the_quotes,
+        }
+        return render(request, "like_form_snippet.html", context)
 
 # --------- New program page
 def new_program(request): #GET REQUEST
