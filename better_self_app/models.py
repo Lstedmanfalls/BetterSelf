@@ -80,6 +80,7 @@ class Program(models.Model):
     user_program = models.ForeignKey(User, related_name="program_user", on_delete = models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    goal = models.IntegerField(null = True)
     objects = ProgramManager()
     # baseline_program
     # intervention_program

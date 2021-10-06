@@ -78,7 +78,7 @@ ul{
     margin-bottom:3rem;
 }
 
-#goal p{
+#goal p:first-of-type{
     font-size:1.5rem;
     color:white;
     font-weight: bold;
@@ -87,10 +87,21 @@ ul{
     padding:1rem;
 }
 
+#goal p:nth-of-type(2){
+    font-weight:1.5rem;
+    padding-top:2.5rem;
+}
+
+#update_goal{
+    width:80%;
+    margin-top:1rem;
+}
+
 table{
     border:.1rem solid black;
     border-spacing: 0;
     border-collapse: collapse;
+    margin-bottom: 2rem;
 }
 
 table button, table a{

@@ -20,6 +20,7 @@ urlpatterns = [
     path('program/<int:program_id>/create_intervention', views.create_intervention), #POST request to create intervention entrys
     path('program/<int:program_id>/delete_baseline', views.delete_baseline), #POST request to delete a specific baseline entry
     path('program/<int:program_id>/delete_intervention', views.delete_intervention), #POST request to delete a specific intervention entry
+    # path('program/<int:program_id>/update_goal', views.update_goal), #POST request to update the goal to a new goal
     # Specific Note Page
     path('baseline_note/<int:baseline_id>', views.view_baseline_note), #GET request to view a specific baseline note
     path('intervention_note/<int:intervention_id>', views.view_intervention_note), #GET request to view a specific baseline note

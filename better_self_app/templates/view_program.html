@@ -104,13 +104,13 @@
                     <div id="goal">
                         <h2>Intervention Goal</h2>
                         <p>{{goal_statement}}</p>
-                        <!-- Code to use to show a generate goal button, but haven't figured out the view yet -->
-                        <!-- {% if new_goal_ready == True %}
-                        <form action="/program/{{this_program.id}}/ new_goal" method="POST">
+                        {% if new_goal_ready == True %}
+                        <p>You met your goal! Ready to level up?</p>
+                        <form action="/program/{{this_program.id}}/update_goal" method="POST">
                         {% csrf_token %}
-                            <button type="submit">Generate New Goal</button>
-                        {% endif %} -->
-                        <!-- </form> -->
+                            <button id="update_goal" type="submit">Update My Goal</button>
+                        {% endif %}
+                        </form>
                     </div>
                     <div id="baseline_average">
                         <h2>Baseline Average</h2>
@@ -183,7 +183,8 @@
                                         <span id="yes">Yes :D</span> {% else %} <span id="no">No</span> {% endif %}
                                         {% endif %}
                                     </td>
-                                    <td>{% if entry.notes|length > 0 %}<a href ="/intervention_note/{{entry.id}}" target="_blank">View</a>{% endif %}</td>
+                                    <td>{% if entry.notes|length > 0 %}<a href ="/intervention_note/{{entry.id}}" target="_blank">View</a>{% endif %}
+                                    </td>
                                     <td>
                                         <form action="/program/{{this_program.id}}/delete_intervention" method="POST">
                                             {% csrf_token %}

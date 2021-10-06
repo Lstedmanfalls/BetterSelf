@@ -27,7 +27,7 @@ def quotes_wall(request): #GET REQUEST
         messages.error(request, "You must be logged in to view this site")
         return redirect ("/admin")
     else:
-        all_the_quotes = Quote.objects.all().order_by("-created_at")
+        all_the_quotes = Quote.objects.order_by("-created_at")
         context = {
         "this_user": User.objects.get(id=request.session["user_id"]),
         "all_the_quotes": all_the_quotes,
@@ -144,15 +144,17 @@ def view_program(request, program_id): #GET REQUEST
             baseline_avg = int(this_program.baseline_program.aggregate(Avg('total'))["total__avg"])
             baseline_avg_statement = f"{baseline_avg} {this_program.measurement.lower()} each day"
             if this_program.direction == 0:
-                goal = int(baseline_avg - (baseline_avg * .1))
-                goal_statement = f"No more than {goal} {this_program.measurement.lower()} per day"
+                this_program.goal = int(baseline_avg - (baseline_avg * .1))
+                this_program.save()
+                goal_statement = f"No more than {this_program.goal} {this_program.measurement.lower()} per day"
             else:
-                goal = int(baseline_avg + (baseline_avg * .1))
-                goal_statement = f"At least {goal} {this_program.measurement.lower()} per day"
+                this_program.goal = int(baseline_avg + (baseline_avg * .1))
+                this_program.save()
+                goal_statement = f"At least {this_program.goal} {this_program.measurement.lower()} per day"
             context["intervention_ready"] = intervention_ready
             context["baseline_avg"] = baseline_avg
             context["baseline_avg_statement"] = baseline_avg_statement
-            context["goal"] = goal
+            context["goal"] = this_program.goal
             context["goal_statement"] = goal_statement
 
         # If an intervention entry has been added, user can see intervention data in the table
@@ -160,23 +162,35 @@ def view_program(request, program_id): #GET REQUEST
                 intervention = True
                 context["intervention"] = intervention
 
-        # # If at least 7 intervention entries have been added, and goal has been met each time, user can generate a new goal
-        # count = 0
-        # if len(existing_intervention) >= 7:
-        #     for i in existing_intervention:
-        #         if change_direction == "decrease":
-        #             if i.total <= goal:
-        #                 count += 1
-        #                 if count >=7:
-        #                     new_goal_ready = True
-        #                     context["new_goal_ready"] = new_goal_ready
-        #         if change_direction == "increase":
-        #             if i.total >= goal:
-        #                 count += 1
-        #                 if count >=7:
-        #                     new_goal_ready = True
-        #                     context["new_goal_ready"] = new_goal_ready
+        # If at least 5 intervention entries have been added, and goal has been met each time, user can generate a new goal
+        intervention_last_5 = existing_intervention.order_by("-created_at")[:5]
+        intervention_avg_last_5 = int(intervention_last_5.aggregate(Avg('total'))["total__avg"])
+        if len(existing_intervention) >= 5:
+            if change_direction == "decrease":
+                if intervention_avg_last_5 <= this_program.goal:
+                    new_goal_ready = True
+                    context["new_goal_ready"] = new_goal_ready
+            if change_direction == "increase":
+                if intervention_avg_last_5 >= this_program.goal:
+                    new_goal_ready = True
+                    context["new_goal_ready"] = new_goal_ready
     return render(request, "view_program.html", context)
+# ISSUE: The goal is hard-coded in the template right now as the baseline goal, so it stays at that when it redirects to the tempate
+# NEED TO FIND: Someway to make clicking the button update the goal, so the current goal needs to be saved somewhere else
+# def update_goal(request, program_id): #POST REQUEST
+#     if request.method != "POST":
+#         return redirect("/")
+#     if request.method == "POST":
+#         this_program = Program.objects.get(id = program_id)
+#         if this_program.direction == 0:
+#             this_program.goal = int(1) # float(this_program.goal - (this_program.goal * .1))
+#             this_program.save()
+#             messages.success(request, "You have a new goal!")
+#         else:
+#             this_program.goal = int(1) # float(this_program.goal + (this_program.goal * .1))
+#             this_program.save()
+#             messages.success(request, "You have a new goal!")
+#         return redirect(f"/program/{program_id}")
 
 def create_baseline(request, program_id): #POST REQUEST
     this_user = User.objects.get(id=request.session["user_id"])
