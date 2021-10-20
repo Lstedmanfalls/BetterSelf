@@ -6,6 +6,13 @@ from .models import Intervention, Quote, Program, Baseline, Intervention
 from django.db.models import Avg, base
 from datetime import date
 import bcrypt
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import io, base64
+from django.db.models.functions import TruncDay
+from matplotlib.ticker import LinearLocator
 
 # --------- Landing page viewable to public
 def landing_page(request): #GET REQUEST
@@ -349,3 +356,5 @@ def account_unlike(request): #POST REQUEST
             "programs": programs,
         }
         return render(request, "unlike_form_account_snippet.html", context)
+
+# MatPlotLib Testing
