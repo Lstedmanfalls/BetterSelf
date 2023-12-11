@@ -106,7 +106,8 @@
                         <p>{{goal_statement}}</p>
                         {% if ready_for_new_goal == True %}
                         <p>Woohoo! You've met your goal! Ready to level up?</p>
-                        <form action="/program/{{program.id}}/update_goal" method="POST">
+                        <!-- TODO add a path and behavior for updating the goal -->
+                        <form onsubmit="return false">
                         {% csrf_token %}
                             <button id="update_goal" type="submit">I'm Ready for the Next Level</button>
                         {% endif %}
