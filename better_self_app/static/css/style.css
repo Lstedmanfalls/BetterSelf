@@ -15,8 +15,9 @@ body{
 }
 
 #wrapper{
-    min-height:85vh;
+    min-height:80vh;
     background-color: var(--yellow);
+    padding-bottom:2rem;
 }
 
 #container{

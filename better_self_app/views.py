@@ -1,360 +1,366 @@
-from django.http import request
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from login_registration_app.models import User
 from .models import Intervention, Quote, Program, Baseline, Intervention
-from django.db.models import Avg, base
-from datetime import date
+from django.db.models import Avg
 import bcrypt
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-import io, base64
-from django.db.models.functions import TruncDay
-from matplotlib.ticker import LinearLocator
 
-# --------- Landing page viewable to public
-def landing_page(request): #GET REQUEST
+# --------- Public landing page
+def get_landing_page(request):
     return render(request, "landing_page.html")
 
-# --------- Landing page after login (new links / access to links)
-def home(request): #GET REQUEST
+# --------- Logged in landing page
+def get_home(request):
     if "user_id" not in request.session:
-        messages.error(request, "You must be logged in to view this site")
-        return redirect ("/admin")
+        return redirect ("/admin")  
+    
     context = {
-    "this_user": User.objects.get(id=request.session["user_id"]),
+    "user": User.objects.get(id=request.session["user_id"]),
     }
     return render(request, "home.html", context)
 
 # --------- Quotes wall page
-def quotes_wall(request): #GET REQUEST
+def get_quotes_wall(request):
     if "user_id" not in request.session:
-        messages.error(request, "You must be logged in to view this site")
         return redirect ("/admin")
-    else:
-        all_the_quotes = Quote.objects.order_by("-created_at")
-        context = {
-        "this_user": User.objects.get(id=request.session["user_id"]),
-        "all_the_quotes": all_the_quotes,
+    
+    quotes = Quote.objects.order_by("-created_at")
+    context = {
+    "user": User.objects.get(id=request.session["user_id"]),
+    "quotes": quotes,
     }
     return render(request, "quotes_wall.html", context)
 
-def create_quote(request): #POST REQUEST
-    this_user = User.objects.get(id=request.session["user_id"])
+def create_quote(request):
+    if "user_id" not in request.session:
+        return redirect ("/admin")
+    if request.method != "POST":
+        return redirect("/quotes")
+    
     errors = Quote.objects.create_quote_validator(request.POST)
-    if len(errors) > 0:
+    if len(errors):
         for key, value in errors.items():
             messages.error(request, value)
         return redirect("/quotes")
-    elif request.method != "POST":
-        return redirect("/quotes")
-    elif request.method == "POST":
-        create = Quote.objects.create(quote = request.POST["quote"], author = request.POST["author"], user_who_uploaded = this_user)
-        this_quote = Quote.objects.get(id = create.id)
-        messages.success(request, "Quote added")
+
+    user = User.objects.get(id=request.session["user_id"])
+    Quote.objects.create(quote = request.POST["quote"], author = request.POST["author"], user_who_uploaded = user)
+    messages.success(request, "Quote added")
     return redirect("/quotes")
 
-def like(request): #POST REQUEST
+def like_quote(request):
+    if "user_id" not in request.session:
+        return redirect ("/admin")
     if request.method != "POST":
         return redirect("/quotes")
-    if request.method == "POST":
-        this_user = User.objects.get(id = request.session["user_id"])
-        this_quote = Quote.objects.get(id = request.POST["quote_id"])
-        this_user.quote_liker.add(this_quote)
-        all_the_quotes = Quote.objects.all().order_by("-created_at")
-        context = {
-            "this_user": User.objects.get(id=request.session["user_id"]),
-            "all_the_quotes": all_the_quotes,
-        }
-        return render(request, "like_form_snippet.html", context)
+    
+    user = User.objects.get(id = request.session["user_id"])
+    quote = Quote.objects.get(id = request.POST["quote_id"])
+    user.quote_liker.add(quote)
+    quotes = Quote.objects.all().order_by("-created_at")
+    context = {
+        "user": User.objects.get(id=request.session["user_id"]),
+        "quotes": quotes,
+    }
+    return render(request, "like_form_snippet.html", context)
 
-def unlike(request): #POST REQUEST
+def unlike_quote(request):
+    if "user_id" not in request.session:
+        return redirect ("/admin")
     if request.method != "POST":
         return redirect("/quotes")
-    if request.method == "POST":
-        this_user = User.objects.get(id = request.session["user_id"])
-        this_quote = Quote.objects.get(id = request.POST["quote_id"])
-        this_user.quote_liker.remove(this_quote)
-        all_the_quotes = Quote.objects.all().order_by("-created_at")
-        context = {
-            "this_user": User.objects.get(id=request.session["user_id"]),
-            "all_the_quotes": all_the_quotes,
-        }
-        return render(request, "like_form_snippet.html", context)
+    
+    user = User.objects.get(id = request.session["user_id"])
+    quote = Quote.objects.get(id = request.POST["quote_id"])
+    user.quote_liker.remove(quote)
+    quotes = Quote.objects.all().order_by("-created_at")
+    context = {
+        "user": User.objects.get(id=request.session["user_id"]),
+        "quotes": quotes,
+    }
+    return render(request, "like_form_snippet.html", context)
 
 # --------- New program page
-def new_program(request): #GET REQUEST
+def get_new_program(request):
     if "user_id" not in request.session:
-        messages.error(request, "You must be logged in to view this site")
         return redirect ("/admin")
-    else:
-        context = {
-        "this_user": User.objects.get(id=request.session["user_id"]),
+    
+    context = {
+    "user": User.objects.get(id=request.session["user_id"]),
     }
     return render(request, "new_program.html", context)
 
-def create_program(request): #POST REQUEST
-    this_user = User.objects.get(id=request.session["user_id"])
+def create_program(request):
+    if "user_id" not in request.session:
+        return redirect ("/admin")
+    if request.method != "POST":
+        return redirect("/program")
     errors = Program.objects.create_program_validator(request.POST)
-    if len(errors) > 0:
+    if len(errors):
         for key, value in errors.items():
             messages.error(request, value)
         return redirect("/program")
-    elif request.method != "POST":
-        return redirect("/program")
-    elif request.method == "POST":
-        create = Program.objects.create(behavior = request.POST["behavior"], measurement = request.POST["measurement"], direction = request.POST["direction"], reason = request.POST["reason"], user_program = this_user)
-        program_id = create.id
+    
+    user = User.objects.get(id=request.session["user_id"])
+    create = Program.objects.create(behavior = request.POST["behavior"], measurement = request.POST["measurement"], direction = request.POST["direction"], reason = request.POST["reason"], user_program = user)
+    program_id = create.id
     return redirect(f"/program/{program_id}")
 
-# ---------  Specific program page, for a specific user
-def view_program(request, program_id): #GET REQUEST
-    # User must be logged in
-    if "user_id" not in request.session:
-        messages.error(request, "You must be logged in to view this site")
-        return redirect ("/admin")
-    this_user = User.objects.get(id=request.session["user_id"])
-    this_program = Program.objects.get(id = program_id)
-    
-    # User cannot view another person's programs
-    if this_user.id != this_program.user_program.id:
-        return redirect ("/home")
-    
-    # Determine direction of desired behavior change
-    if this_program.direction == 0:
-        change_direction = "decrease"
-    else:
-        change_direction = "increase"
+# ---------  Individual program page
 
-    # Default context before any baseline entries have been added
+def __get_program_goal_context(program, context):
+    # Goal is set as baseline average +/- 10%, depending on change direction
+    baseline_avg = int(program.baseline_program.aggregate(Avg('total'))["total__avg"])
+    context["baseline_avg"] = baseline_avg
+
+    goal_percentage_change = 0.10
+    raw_goal_change = baseline_avg * goal_percentage_change
+    whole_num_goal_change = raw_goal_change if raw_goal_change >= 1 else 1
+    program.goal = baseline_avg - whole_num_goal_change if program.direction == 0 else baseline_avg + whole_num_goal_change
+    program.save()
+    context["goal"] = program.goal
+
+    goal_statement_start = f"No more than" if program.direction == 0 else f"At least"
+    context["goal_statement"] = f"{goal_statement_start} {program.goal} {program.measurement.lower()} per day"
+    context["baseline_avg_statement"] = f"{baseline_avg} {program.measurement.lower()} each day"
+    return context
+
+def __check_if_ready_for_new_goal(intervention_data, context):
+    intervention_last_5 = intervention_data.order_by("-created_at")[:5]
+    intervention_avg_last_5 = int(intervention_last_5.aggregate(Avg('total'))["total__avg"])
+
+    ready_for_new_goal = True if (context["change_direction"] == 'increase' and intervention_avg_last_5 >= context["goal"]) or (context["change_direction"] == 'decrease' and intervention_avg_last_5 <= context["goal"]) else False
+    return ready_for_new_goal
+
+def __get_program_context(user, program):
+    change_direction = "decrease" if program.direction == 0 else "increase"
     context = {
-        "this_user":this_user,
-        "this_program": this_program,
+        "user": user,
+        "program": program,
         "change_direction": change_direction,
         }
+    
+    baseline_data = program.baseline_program.all()
+    if not baseline_data:
+        return context
+    
+    context["baseline"] = True
+    if len(baseline_data) < 3:
+        return context
+    
+    context["intervention_ready"] = True
+    context = __get_program_goal_context(program, context) 
+    intervention_data = program.intervention_program.all()
+    if not intervention_data:
+        return context
+    
+    context["intervention"] = True
+    if len(intervention_data) < 5:
+        return context
+    
+    ready_for_new_goal = __check_if_ready_for_new_goal(intervention_data, context)
+    if not ready_for_new_goal:
+        return context
+    
+    context["ready_for_new_goal"] = True
+    # TODO: Add functionality to increase the goal to 10% +/- the previous goal
 
-    existing_baseline = this_program.baseline_program.all()
-    existing_intervention = this_program.intervention_program.all()
+    return context
 
-    # If a baseline entry has been added, user can see table with baseline data    
-    if len(existing_baseline) > 0:
-        baseline = True
-        context["baseline"] = baseline
-        
-        # If at least 3 baseline entries have been added, user can see baseline average and goal
-        if len(existing_baseline) >= 3:
-            intervention_ready = True
+def get_program(request, program_id):
+    if "user_id" not in request.session:
+        return redirect ("/admin")
+    user = User.objects.get(id=request.session["user_id"])
+    program = Program.objects.get(id = program_id)
+    if user.id != program.user_program.id:
+        return redirect ("/home")
 
-            # Goal is set as 10% more or less than the baseline average, depending on desired change direction
-            baseline_avg = int(this_program.baseline_program.aggregate(Avg('total'))["total__avg"])
-            baseline_avg_statement = f"{baseline_avg} {this_program.measurement.lower()} each day"
-            if this_program.direction == 0:
-                this_program.goal = int(baseline_avg - (baseline_avg * .1))
-                this_program.save()
-                goal_statement = f"No more than {this_program.goal} {this_program.measurement.lower()} per day"
-            else:
-                this_program.goal = int(baseline_avg + (baseline_avg * .1))
-                this_program.save()
-                goal_statement = f"At least {this_program.goal} {this_program.measurement.lower()} per day"
-            context["intervention_ready"] = intervention_ready
-            context["baseline_avg"] = baseline_avg
-            context["baseline_avg_statement"] = baseline_avg_statement
-            context["goal"] = this_program.goal
-            context["goal_statement"] = goal_statement
-
-        # If an intervention entry has been added, user can see intervention data in the table
-            if len(existing_intervention) > 0:
-                intervention = True
-                context["intervention"] = intervention
-
-        # If at least 5 intervention entries have been added, and goal has been met each time, user can generate a new goal
-        intervention_last_5 = existing_intervention.order_by("-created_at")[:5]
-        intervention_avg_last_5 = int(intervention_last_5.aggregate(Avg('total'))["total__avg"])
-        if len(existing_intervention) >= 5:
-            if change_direction == "decrease":
-                if intervention_avg_last_5 <= this_program.goal:
-                    new_goal_ready = True
-                    context["new_goal_ready"] = new_goal_ready
-            if change_direction == "increase":
-                if intervention_avg_last_5 >= this_program.goal:
-                    new_goal_ready = True
-                    context["new_goal_ready"] = new_goal_ready
+    context = __get_program_context(user, program)
     return render(request, "view_program.html", context)
-# ISSUE: The goal is hard-coded in the template right now as the baseline goal, so it stays at that when it redirects to the tempate
-# NEED TO FIND: Someway to make clicking the button update the goal, so the current goal needs to be saved somewhere else
-# def update_goal(request, program_id): #POST REQUEST
-#     if request.method != "POST":
-#         return redirect("/")
-#     if request.method == "POST":
-#         this_program = Program.objects.get(id = program_id)
-#         if this_program.direction == 0:
-#             this_program.goal = int(1) # float(this_program.goal - (this_program.goal * .1))
-#             this_program.save()
-#             messages.success(request, "You have a new goal!")
-#         else:
-#             this_program.goal = int(1) # float(this_program.goal + (this_program.goal * .1))
-#             this_program.save()
-#             messages.success(request, "You have a new goal!")
-#         return redirect(f"/program/{program_id}")
 
-def create_baseline(request, program_id): #POST REQUEST
-    this_user = User.objects.get(id=request.session["user_id"])
-    this_program = Program.objects.get(id = program_id)
+def create_baseline(request, program_id):
+    if "user_id" not in request.session:
+        return redirect ("/admin")
+    if request.method != "POST":
+        return redirect(f"/program/{program_id}")
+    
+    program = Program.objects.get(id = program_id)
     errors = Baseline.objects.create_baseline_validator(request.POST)
     if len(errors) > 0:
         for key, value in errors.items():
             messages.error(request, value)
         return redirect(f"/program/{program_id}")
-    elif request.method != "POST":
-        return redirect(f"/program/{program_id}")
-    elif request.method == "POST":
-        Baseline.objects.create(date = request.POST["date"], total = request.POST["total"], notes = request.POST["notes"], user_baseline = this_user, program_baseline = this_program)
+
+    user = User.objects.get(id=request.session["user_id"])
+    Baseline.objects.create(date = request.POST["date"], total = request.POST["total"], notes = request.POST["notes"], user_baseline = user, program_baseline = program)
     return redirect(f"/program/{program_id}")
     
-def create_intervention(request, program_id): #POST REQUEST
-    this_user = User.objects.get(id=request.session["user_id"])
-    this_program = Program.objects.get(id = program_id)
+def create_intervention(request, program_id):
+    if "user_id" not in request.session:
+        return redirect ("/admin")
+
+    program = Program.objects.get(id = program_id)
     errors = Intervention.objects.create_intervention_validator(request.POST)
     if len(errors) > 0:
         for key, value in errors.items():
             messages.error(request, value)
         return redirect(f"/program/{program_id}")
-    elif request.method != "POST":
-        return redirect(f"/program/{program_id}")
-    elif request.method == "POST":
-        Intervention.objects.create(date = request.POST["date"], total = request.POST["total"], notes = request.POST["notes"], user_intervention = this_user, program_intervention = this_program)
-    return redirect(f"/program/{program_id}")
-
-def delete_baseline(request, program_id): #POST REQUEST
-    this_baseline = Baseline.objects.get(id = request.POST["baseline_id"])
     if request.method != "POST":
         return redirect(f"/program/{program_id}")
-    if request.method == "POST":
-        this_baseline.delete()        
+
+    user = User.objects.get(id=request.session["user_id"])
+    Intervention.objects.create(date = request.POST["date"], total = request.POST["total"], notes = request.POST["notes"], user_intervention = user, program_intervention = program)
     return redirect(f"/program/{program_id}")
 
-def delete_intervention(request, program_id): #POST REQUEST
-    this_intervention = Intervention.objects.get(id = request.POST["intervention_id"])
+def delete_baseline(request, program_id):
+    if "user_id" not in request.session:
+        return redirect ("/admin")
     if request.method != "POST":
         return redirect(f"/program/{program_id}")
-    if request.method == "POST":
-        this_intervention.delete()        
+    
+    baseline = Baseline.objects.get(id = request.POST["baseline_id"])
+    baseline.delete()        
     return redirect(f"/program/{program_id}")
 
-def view_baseline_note(request, baseline_id): #GET REQUEST
-    this_baseline = Baseline.objects.get(id = baseline_id)
+def delete_intervention(request, program_id):
+    if "user_id" not in request.session:
+        return redirect ("/admin")
+    if request.method != "POST":
+        return redirect(f"/program/{program_id}")
+    
+    intervention = Intervention.objects.get(id = request.POST["intervention_id"])
+    intervention.delete()        
+    return redirect(f"/program/{program_id}")
+
+def view_baseline_note(request, baseline_id):
+    if "user_id" not in request.session:
+        return redirect ("/admin")
+    
+    baseline = Baseline.objects.get(id = baseline_id)
     context = {
-    "this_baseline":this_baseline
+    "baseline": baseline
     }
     return render(request, "view_baseline_note.html", context)
 
-def view_intervention_note(request, intervention_id): #GET REQUEST
-    this_intervention = Intervention.objects.get(id = intervention_id)
+def view_intervention_note(request, intervention_id):
+    if "user_id" not in request.session:
+        return redirect ("/admin")
+    
+    intervention = Intervention.objects.get(id = intervention_id)
     context = {
-    "this_intervention":this_intervention
+    "intervention":intervention
     }
     return render(request, "view_intervention_note.html", context)
 
-# --------- Specific user account page
-def account(request): #GET REQUEST
-        # User must be logged in
+# --------- User account page
+def account(request):
     if "user_id" not in request.session:
-        messages.error(request, "You must be logged in to view this site")
         return redirect ("/admin")
-    this_user = User.objects.get(id = request.session["user_id"])
-    programs = this_user.program_user.all()
+    
+    user = User.objects.get(id = request.session["user_id"])
+    programs = user.program_user.all()
     context = {
-        "this_user": this_user,
+        "user": user,
         "programs": programs,
     }
     return render(request, "account.html", context)
 
-def delete_program(request): #POST REQUEST
-    this_program = Program.objects.get(id = request.POST["program_id"])
+def delete_program(request):
+    if "user_id" not in request.session:
+        return redirect ("/admin")
     if request.method != "POST":
         return redirect("/home")
-    if request.method == "POST":
-        this_program.delete()        
+    
+    program = Program.objects.get(id = request.POST["program_id"])
+    program.delete()        
     return redirect("/account")
 
-def update_display_name(request): #POST REQUEST
-    this_user = User.objects.get(id = request.session["user_id"])
-    errors = User.objects.update_display_name_validator(request.POST, request.session)    
-    if request.POST['display_name'] == this_user.display_name:
-            messages.success(request, "No changes made")
-            return redirect("/account")
+def update_display_name(request):
+    if "user_id" not in request.session:
+        return redirect ("/admin")
+    if request.method != "POST":
+        return redirect("/home")
+    
+    errors = User.objects.update_display_name_validator(request.POST, request.session)
     if len(errors) > 0:
         for key, value in errors.items():
             messages.error(request, value)
         return redirect("/account")
-    elif request.method != "POST":
-        return redirect("/home")
-    elif request.method == "POST":
-        display_name = request.POST['display_name']
-        this_user.display_name = display_name
-        this_user.save()
-        messages.success(request, "Display name updated")
+
+    user = User.objects.get(id = request.session["user_id"])    
+    if request.POST['display_name'] == user.display_name:
+        messages.success(request, "No changes made")
+        return redirect("/account")
+    display_name = request.POST['display_name']
+    user.display_name = display_name
+    user.save()
+    messages.success(request, "Display name updated")
     return redirect("/account")
 
-def update_password(request): #POST REQUEST
-    this_user = User.objects.get(id = request.session["user_id"])
+def update_password(request):
+    if "user_id" not in request.session:
+        return redirect ("/admin")
+    if request.method != "POST":
+        return redirect("/home")
+    
     errors = User.objects.update_password_validator(request.POST)
     if len(errors) > 0:
         for key, value in errors.items():
             messages.error(request, value)
         return redirect("/account")
-    elif request.method != "POST":
-        return redirect("/home")
-    elif request.method == "POST":
-        password = request.POST['password']
-        pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
-        this_user.password = pw_hash
-        this_user.save()
-        messages.success(request, "Password updated")
+
+    user = User.objects.get(id = request.session["user_id"])
+    password = request.POST['password']
+    pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+    user.password = pw_hash
+    user.save()
+    messages.success(request, "Password updated")
     return redirect("/account")
 
-def update_quote(request): #POST REQUEST
-    this_quote = Quote.objects.get(id = request.POST["quote_id"])
+def update_quote(request):
+    if "user_id" not in request.session:
+        return redirect ("/admin")
+    if request.method != "POST":
+        return redirect("/home")
+    
     errors = Quote.objects.update_quote_validator(request.POST)
-    if request.POST['quote'] == this_quote.quote and request.POST['author'] == this_quote.author:
-            messages.success(request, "No changes made")
-            return redirect("/account")
-    elif len(errors) > 0:
+    if len(errors) > 0:
         for key, value in errors.items():
             messages.error(request, value)
         return redirect("/account")
-    elif request.method != "POST":
-        return redirect("/home")
-    elif request.method == "POST":
-        this_quote = Quote.objects.get(id = request.POST["quote_id"])
-        this_quote.quote = request.POST["quote"]
-        this_quote.author = request.POST["author"]
-        this_quote.save()
-        messages.success(request, "Quote updated")
+
+    quote = Quote.objects.get(id = request.POST["quote_id"])
+    if request.POST['quote'] == quote.quote and request.POST['author'] == quote.author:
+        messages.success(request, "No changes made")
+        return redirect("/account")    
+    quote.quote = request.POST["quote"]
+    quote.author = request.POST["author"]
+    quote.save()
+    messages.success(request, "Quote updated")
     return redirect("/account")
 
-def delete_quote(request): #POST REQUEST
-    this_quote = Quote.objects.get(id = request.POST["quote_id"])
+def delete_quote(request):
+    if "user_id" not in request.session:
+        return redirect ("/admin")
     if request.method != "POST":
         return redirect("/home")
-    if request.method == "POST":
-        this_quote.delete()        
+
+    quote = Quote.objects.get(id = request.POST["quote_id"])
+    quote.delete()        
     return redirect("/account")
 
-def account_unlike(request): #POST REQUEST
-    this_user = User.objects.get(id = request.session["user_id"])
-    this_quote = Quote.objects.get(id = request.POST["quote_id"])
-    programs = this_user.program_user.all()
+def account_unlike(request):
+    if "user_id" not in request.session:
+        return redirect ("/admin")
     if request.method != "POST":
         return redirect("/account")
-    if request.method == "POST":
-        this_user.quote_liker.remove(this_quote)
-        context = {
-            "this_user": this_user,
-            "programs": programs,
-        }
-        return render(request, "unlike_form_account_snippet.html", context)
-
-# MatPlotLib Testing
+    
+    user = User.objects.get(id = request.session["user_id"])
+    quote = Quote.objects.get(id = request.POST["quote_id"])
+    programs = user.program_user.all()
+    user.quote_liker.remove(quote)
+    context = {
+        "user": user,
+        "programs": programs,
+    }
+    return render(request, "unlike_form_account_snippet.html", context)

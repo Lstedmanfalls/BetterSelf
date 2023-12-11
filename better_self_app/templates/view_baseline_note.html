@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baseline {{this_baseline.date|date:"n/j/y"}} Note</title>
+    <title>Baseline {{baseline.date|date:"n/j/y"}} Note</title>
     {% load static %}
     <link rel="stylesheet" href="{% static '/css/style.css' %}">
     <link rel="stylesheet" href="{% static '/css/view_note.css' %}">
@@ -16,12 +16,12 @@
 </head>
 <body>
     <div id="wrapper">
-        <h1>Baseline {{this_baseline.date|date:"n/j/y"}} Note</h1>
+        <h1>Baseline {{baseline.date|date:"n/j/y"}} Note</h1>
         <div id="container">
             <div id="content">
                 <p><span>Phase: </span>Baseline</p>
-                <p><span>Day Total: </span>{{this_baseline.total}}</p>
-                <p><span>Note: </span>{{this_baseline.notes}}</p>
+                <p><span>Day Total: </span>{{baseline.total}}</p>
+                <p><span>Note: </span>{{baseline.notes}}</p>
             </div>
         </div>
     </div>

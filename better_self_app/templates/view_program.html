@@ -32,9 +32,9 @@
             </div>
         </nav>
         <div id="container">
-            <h1>{{this_program.behavior.capitalize}} Program</h1>
-            <p id="affirmation" class ="statement">I am going to {{change_direction}} my number of {{this_program.measurement.lower}} each day.</p>
-            <p class="statement">{{this_program.reason}}</p>
+            <h1>{{program.behavior.capitalize}} Program</h1>
+            <p id="affirmation" class ="statement">I am going to {{change_direction}} my number of {{program.measurement.lower}} each day.</p>
+            <p class="statement">{{program.reason}}</p>
             {% if messages %}
             {% for message in messages %}    
             <p class="messages">    
@@ -83,7 +83,7 @@
                 <div id = "add_baseline_data">
                     <div id="add_baseline">
                         <h2>Add Baseline Entry</h2>
-                            <form action="/program/{{this_program.id}}/create_baseline" method="POST">
+                            <form action="/program/{{program.id}}/create_baseline" method="POST">
                             {% csrf_token %}
                                 <label for="date">Date</label>
                                 <input name="date" type="date" value = "2021-09-01" required>
@@ -104,11 +104,11 @@
                     <div id="goal">
                         <h2>Intervention Goal</h2>
                         <p>{{goal_statement}}</p>
-                        {% if new_goal_ready == True %}
-                        <p>You met your goal! Ready to level up?</p>
-                        <form action="/program/{{this_program.id}}/update_goal" method="POST">
+                        {% if ready_for_new_goal == True %}
+                        <p>Woohoo! You've met your goal! Ready to level up?</p>
+                        <form action="/program/{{program.id}}/update_goal" method="POST">
                         {% csrf_token %}
-                            <button id="update_goal" type="submit">Update My Goal</button>
+                            <button id="update_goal" type="submit">I'm Ready for the Next Level</button>
                         {% endif %}
                         </form>
                     </div>
@@ -121,7 +121,7 @@
                 {% if intervention_ready == True %}
                 <div id="add_intervention">
                     <h2>Add Intervention Entry</h2>
-                    <form action="/program/{{this_program.id}}/create_intervention" method="POST">
+                    <form action="/program/{{program.id}}/create_intervention" method="POST">
                     {% csrf_token %}
                         <label for="date">Date</label>
                         <input name="date" type="date" value = "2021-09-01" required>
@@ -142,14 +142,14 @@
                                 <tr>
                                     <th>Phase</th>
                                     <th>Date</th>
-                                    <th>{{this_program.measurement.capitalize}}</th>
+                                    <th>{{program.measurement.capitalize}}</th>
                                     <th>Met Goal?</th>
                                     <th>Note</th>
                                     <th>Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for entry in this_program.baseline_program.all %}
+                                {% for entry in program.baseline_program.all %}
                                 <tr>
                                     <td>Baseline</td>
                                     <td>{{entry.date|date:"n/j/y"}}</td>
@@ -157,7 +157,7 @@
                                     <td>N/A</td>
                                     <td>{% if entry.notes|length > 0 %}<a href ="/baseline_note/{{entry.id}}" target="_blank">View</a>{% endif %}</td>
                                     <td>{% if intervention != True %}
-                                        <form action="/program/{{this_program.id}}/delete_baseline" method="POST">
+                                        <form action="/program/{{program.id}}/delete_baseline" method="POST">
                                             {% csrf_token %}
                                             <input name="baseline_id" type="hidden" value="{{entry.id}}">
                                             <button type="submit">Delete</button>
@@ -169,24 +169,24 @@
                                 </tr>
                                 {% endfor %}
                         {% if intervention == True %}
-                                {% for entry in this_program.intervention_program.all %}
+                                {% for entry in program.intervention_program.all %}
                                 <tr id="intervention_row">
                                     <td>Intervention</td>
                                     <td>{{entry.date|date:"n/j/y"}}</td>
                                     <td>{{entry.total}}</td>
-                                    <td>{% if this_program.direction == 0 %}
+                                    <td>{% if program.direction == 0 %}
                                         {% if goal >= entry.total %}
-                                            <span id="yes">Yes :D</span> {% else %} <span id="no">No</span> {% endif %}
+                                            <span id="yes">Yes!</span> {% else %} <span id="no">No</span> {% endif %}
                                         {% endif %}
-                                        {% if this_program.direction == 1 %} 
+                                        {% if program.direction == 1 %} 
                                         {% if entry.total >= goal %}
-                                        <span id="yes">Yes :D</span> {% else %} <span id="no">No</span> {% endif %}
+                                        <span id="yes">Yes!</span> {% else %} <span id="no">No</span> {% endif %}
                                         {% endif %}
                                     </td>
                                     <td>{% if entry.notes|length > 0 %}<a href ="/intervention_note/{{entry.id}}" target="_blank">View</a>{% endif %}
                                     </td>
                                     <td>
-                                        <form action="/program/{{this_program.id}}/delete_intervention" method="POST">
+                                        <form action="/program/{{program.id}}/delete_intervention" method="POST">
                                             {% csrf_token %}
                                             <input name="intervention_id" type="hidden" value="{{entry.id}}">
                                             <button type="submit">Delete</button>

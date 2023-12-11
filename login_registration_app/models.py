@@ -46,16 +46,17 @@ class UserManager(models.Manager):
         return errors
 
     def update_display_name_validator(self, postData, session):
-        this_user = User.objects.get(id = session['user_id'])
+        user = User.objects.get(id = session['user_id'])
         existing_display_name = User.objects.filter(display_name = postData["display_name"])
         errors = {}
         if len(postData['display_name']) < 1:
             errors["display_name"] = "Display name is required"
-        elif len(existing_display_name) and existing_display_name[0].id != this_user.id:
+        elif len(existing_display_name) and existing_display_name[0].id != user.id:
             errors['duplicate_display_name'] = "That display name is already taken"
         return errors
 
 class User(models.Model):
+    id = models.BigAutoField(primary_key=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     display_name = models.CharField(max_length=255)

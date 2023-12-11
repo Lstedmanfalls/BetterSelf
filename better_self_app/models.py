@@ -64,6 +64,7 @@ class InterventionManager(models.Manager):
         return errors
 
 class Quote(models.Model):
+    id = models.BigAutoField(primary_key=True)
     quote = models.TextField()    
     author = models.CharField(max_length=255)
     user_who_uploaded = models.ForeignKey(User, related_name= "quote_uploader", on_delete = models.CASCADE)
@@ -73,6 +74,7 @@ class Quote(models.Model):
     objects = QuoteManager()
 
 class Program(models.Model):
+    id = models.BigAutoField(primary_key=True)
     behavior = models.CharField(max_length=255)
     measurement = models.CharField(max_length=255)
     direction = models.IntegerField()
@@ -86,6 +88,7 @@ class Program(models.Model):
     # intervention_program
 
 class Baseline(models.Model):
+    id = models.BigAutoField(primary_key=True)
     date = models.DateField()
     total = models.IntegerField()
     notes = models.TextField()
@@ -96,6 +99,7 @@ class Baseline(models.Model):
     objects = BaselineManager()
 
 class Intervention(models.Model):
+    id = models.BigAutoField(primary_key=True)
     date = models.DateField()
     total = models.IntegerField()
     notes = models.TextField()

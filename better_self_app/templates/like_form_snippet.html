@@ -1,10 +1,10 @@
-{% for quote in all_the_quotes %}
+{% for quote in quotes %}
 <div id="one_quote">
     <p class="quote">"{{quote.quote}}"</p>
     <p class="author">- {{quote.author}}</p>
     <p class="added_by">Added by {{quote.user_who_uploaded.display_name}} on {{quote.created_at.date}}</p>
     </p>
-    {% if this_user in quote.user_who_liked.all %}
+    {% if user in quote.user_who_liked.all %}
     <form class="unlike" method="POST">
     {% csrf_token %}
         <p>

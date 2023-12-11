@@ -1,7 +1,7 @@
-{% if this_user.quote_uploader.all.count > 0 %}
+{% if user.quote_uploader.all.count > 0 %}
 <div id="uploaded_quotes">
     <h2>Quotes You Added</h2>
-    {% for quote in this_user.quote_uploader.all|dictsortreversed:"created_at" %} 
+    {% for quote in user.quote_uploader.all|dictsortreversed:"created_at" %} 
     <div id ="one_uploaded_quote">
         <form action="/account/update_quote" method="POST">
         {% csrf_token %}
@@ -23,10 +23,10 @@
     {% endfor %}
 </div>
 {% endif %}
-{% if this_user.quote_liker.all.count > 0 %}
+{% if user.quote_liker.all.count > 0 %}
 <div id="liked_quotes">
     <h2>Quotes You Like</h2>
-    {% for quote in this_user.quote_liker.all %}
+    {% for quote in user.quote_liker.all %}
     <div id="one_liked_quote">
         <p><span>Quote: </span>{{quote.quote}}</p>
         <p><span>Author: </span>{{quote.author}}</p>
